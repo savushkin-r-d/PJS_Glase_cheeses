@@ -24,3 +24,4 @@ venv*
 
 #Directories
 .idea/
+target/
