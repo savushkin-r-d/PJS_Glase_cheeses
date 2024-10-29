@@ -1,9 +1,9 @@
 package org.acme.projectjobschedule.domain;
 
 import org.acme.projectjobschedule.domain.resource.Resource;
-
+import org.acme.projectjobschedule.domain.ExecutionMode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+//import com.fasterxml.jackson.databind.ObjectMapper;
 public class ResourceRequirement {
 
     private String id;
