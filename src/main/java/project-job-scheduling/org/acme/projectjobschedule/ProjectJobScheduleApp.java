@@ -6,8 +6,8 @@ import ai.timefold.solver.core.config.solver.SolverConfig;
 // import org.acme.projectjobschedule.domain.Allocation;
 // import org.acme.projectjobschedule.domain.ExecutionMode;
 import org.acme.projectjobschedule.domain.Job;
-// import org.acme.projectjobschedule.domain.JobType;
-// import org.acme.projectjobschedule.domain.Project;
+ import org.acme.projectjobschedule.domain.JobType;
+ import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
 // import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory;
 
 // import java.time.DayOfWeek;
 import java.time.Duration;
-// import java.time.LocalTime;
-// import java.util.ArrayList;
-// import java.util.Collections;
-// import java.util.List;
-// import java.util.Map;
-// import java.util.Objects;
-// import java.util.stream.Collectors;
+ import java.time.LocalTime;
+ import java.util.ArrayList;
+ import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+ import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ProjectJobScheduleApp {
 
@@ -33,7 +33,47 @@ public class ProjectJobScheduleApp {
         SMALL,
         LARGE
     }
+    public static void ProjectJobSchedule(ProjectJobSchedule schedule) {
+        LOGGER.info("");
+        List<Project> projects = schedule.getProjects();
+        List<Job> jobs = schedule.getJobs();
 
+        Map<Project, List<Job>> projectJobMap = jobs.stream()
+                .filter(job -> job.getProject() != null)
+                .collect(Collectors.groupingBy(Job::getProject));
+
+        LOGGER.info("|  Project id    | Project | Job type   |");
+        LOGGER.info("|" + "-------------|------------|------------|");
+
+        for (Project project : projects) {
+            List<Job> projectJobs = projectJobMap.getOrDefault(project, Collections.emptyList());
+
+            if (projectJobs.isEmpty()) {
+                LOGGER.info("| " + String.format("%-11s", project.getReleaseDate()) + " | "
+                        + "No scheduled jobs".formatted() + " |");
+                continue;
+            }
+
+            for (Job job : projectJobs) {
+                LOGGER.info("| " + String.format("%-11s", project.getId()) + " | "
+                        + String.format("%-10s", job.getProject()) + " | "
+                        + String.format("%-10s", job.getJobType()) + " | ");
+            }
+            LOGGER.info("|" + "-------------|------------|------------|");
+        }
+
+        List<Job> unassignedJobs = jobs.stream()
+                .filter(job -> job.getProject() == null || job.getJobType() == null)
+                .toList();
+
+        if (!unassignedJobs.isEmpty()) {
+            LOGGER.info("");
+            LOGGER.info("Unassigned jobs:");
+            for (Job job : unassignedJobs) {
+                LOGGER.info("  " + job.getProject() + " - Job type: " + job.getJobType());
+            }
+        }
+    }
     public static void main(String[] args) {
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
@@ -57,56 +97,5 @@ public class ProjectJobScheduleApp {
 
 }
 
-/*rivate static void printProjectJobSchedule(ProjectJobSchedule projectJobSchedule) {
-    LOGGER.info("");
-    List<Allocation> alllocation = projectJobSchedule.getAllocations();
-    List<Job> jobs = projectJobSchedule.getJobs();
-    Map<Timeslot, Map<Room, List<Lesson>>> lessonMap = lessons.stream()
-            .filter(lesson -> lesson.getTimeslot() != null && lesson.getRoom() != null)
-            .collect(Collectors.groupingBy(Lesson::getTimeslot, Collectors.groupingBy(Lesson::getRoom)));
-    LOGGER.info("|            | " + rooms.stream()
-            .map(room -> String.format("%-10s", room.getName())).collect(Collectors.joining(" | ")) + " |");
-    LOGGER.info("|" + "------------|".repeat(rooms.size() + 1));
-    for (Timeslot timeslot : timeTable.getTimeslots()) {
-        List<List<Lesson>> cells = rooms.stream()
-                .map(room -> {
-                    Map<Room, List<Lesson>> byRoomMap = lessonMap.get(timeslot);
-                    if (byRoomMap == null) {
-                        return Collections.<Lesson>emptyList();
-                    }
-                    List<Lesson> cellLessons = byRoomMap.get(room);
-                    return Objects.requireNonNullElse(cellLessons, Collections.<Lesson>emptyList());
-                }).toList();
 
-        LOGGER.info("| " + String.format("%-10s",
-                timeslot.getDayOfWeek().toString().substring(0, 3) + " " + timeslot.getStartTime()) + " | "
-                + cells.stream().map(cellLessons -> String.format("%-10s",
-                        cellLessons.stream().map(Lesson::getSubject).collect(Collectors.joining(", "))))
-                .collect(Collectors.joining(" | "))
-                + " |");
-        LOGGER.info("|            | "
-                + cells.stream().map(cellLessons -> String.format("%-10s",
-                        cellLessons.stream().map(Lesson::getTeacher).collect(Collectors.joining(", "))))
-                .collect(Collectors.joining(" | "))
-                + " |");
-        LOGGER.info("|            | "
-                + cells.stream().map(cellLessons -> String.format("%-10s",
-                        cellLessons.stream().map(Lesson::getStudentGroup).collect(Collectors.joining(", "))))
-                .collect(Collectors.joining(" | "))
-                + " |");
-        LOGGER.info("|" + "------------|".repeat(rooms.size() + 1));
-    }
-    List<Lesson> unassignedLessons = lessons.stream()
-            .filter(lesson -> lesson.getTimeslot() == null || lesson.getRoom() == null)
-            .toList();
-    if (!unassignedLessons.isEmpty()) {
-        LOGGER.info("");
-        LOGGER.info("Unassigned lessons");
-        for (Lesson lesson : unassignedLessons) {
-            LOGGER.info("  " + lesson.getSubject() + " - " + lesson.getTeacher() + " - " + lesson.getStudentGroup());
-        }
-    }
-}
 
-}
-*/
