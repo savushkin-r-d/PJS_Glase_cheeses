@@ -44,7 +44,8 @@ public class ProjectJobScheduleApp {
                 .withTerminationSpentLimit(Duration.ofSeconds(5)));
 
         // Load the problem
-        ProjectJobSchedule problem = DemoDataGenerator(DemoData.SMALL);
+        DemoDataGenerator demo_data = new DemoDataGenerator();
+        ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
