@@ -10,7 +10,6 @@ import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftSc
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
 import org.acme.projectjobschedule.domain.resource.Resource;
-import org.acme.projectjobschedule.domain.ResourceRequirement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;

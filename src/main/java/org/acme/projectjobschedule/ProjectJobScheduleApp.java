@@ -2,27 +2,20 @@ package org.acme.projectjobschedule;
 
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
-import ai.timefold.solver.core.config.solver.SolverConfig;
-// import org.acme.projectjobschedule.domain.Allocation;
-// import org.acme.projectjobschedule.domain.ExecutionMode;
+import ai.timefold.solver.core.config.solver.SolverConfig;;
 import org.acme.projectjobschedule.domain.Job;
- import org.acme.projectjobschedule.domain.JobType;
- import org.acme.projectjobschedule.domain.Project;
+import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
-// import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
 import org.acme.projectjobschedule.rest.DemoDataGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// import java.time.DayOfWeek;
 import java.time.Duration;
- import java.time.LocalTime;
- import java.util.ArrayList;
- import java.util.Collections;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
- import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ProjectJobScheduleApp {
@@ -77,7 +70,6 @@ public class ProjectJobScheduleApp {
     public static void main(String[] args) {
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
-                .withEntityClasses(Job.class)
                 .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
                 // The solver runs only for 5 seconds on this small dataset.
                 // It's recommended to run for at least 5 minutes ("5m") otherwise.
@@ -92,7 +84,7 @@ public class ProjectJobScheduleApp {
         ProjectJobSchedule solution = solver.solve(problem);
 
         // Visualize the solution
-       // printProjectJobSchedule(solution);
+       //printProjectJobSchedule(solution);
     }
 
 }
