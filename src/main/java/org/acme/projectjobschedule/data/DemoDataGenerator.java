@@ -1,4 +1,4 @@
-package org.acme.projectjobschedule.rest;
+package org.acme.projectjobschedule.data;
 
 import static java.util.Collections.emptyList;
 import static org.acme.projectjobschedule.domain.JobType.SINK;
