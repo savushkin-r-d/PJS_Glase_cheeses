@@ -5,8 +5,6 @@ import static org.acme.projectjobschedule.domain.JobType.STANDARD;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import ai.timefold.solver.test.api.score.stream.ConstraintVerifier;
 
 import org.acme.projectjobschedule.domain.Allocation;
@@ -18,8 +16,10 @@ import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.junit.jupiter.api.Test;
 
-//import io.quarkus.test.junit.QuarkusTest;
+class ProjectJobSchedulingConstraintProviderTest {
 
+    ConstraintVerifier<ProjectJobSchedulingConstraintProvider,ProjectJobSchedule> constraintVerifier = ConstraintVerifier.build(
+            new ProjectJobSchedulingConstraintProvider(), ProjectJobSchedule.class, Allocation.class);
 
     @Test
     void nonRenewableResourceCapacity() {
