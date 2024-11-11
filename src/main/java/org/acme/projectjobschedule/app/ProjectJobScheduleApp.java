@@ -1,4 +1,4 @@
-package org.acme.projectjobschedule;
+package org.acme.projectjobschedule.app;
 
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;

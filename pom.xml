@@ -133,7 +133,7 @@
             </descriptors>
             <archive>
                 <manifestEntries>
-                    <Main-Class>org.acme.projectjobschedule.ProjectJobScheduleApp</Main-Class>
+                    <Main-Class>org.acme.projectjobschedule.app.ProjectJobScheduleApp</Main-Class>
                     <Multi-Release>true</Multi-Release> <!-- Some of our dependencies are multi-release JARs. -->
                 </manifestEntries>
             </archive>
