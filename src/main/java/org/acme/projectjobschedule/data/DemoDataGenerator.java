@@ -1,4 +1,4 @@
-package org.acme.projectjobschedule.rest;
+package org.acme.projectjobschedule.data;
 
 import static java.util.Collections.emptyList;
 import static org.acme.projectjobschedule.domain.JobType.SINK;
@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import jakarta.enterprise.context.ApplicationScoped;
+//import jakarta.enterprise.context.ApplicationScoped;
 
 import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.ExecutionMode;
@@ -22,7 +22,7 @@ import org.acme.projectjobschedule.domain.resource.GlobalResource;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.acme.projectjobschedule.domain.resource.Resource;
 
-@ApplicationScoped
+
 public class DemoDataGenerator {
 
     private static final Project FIRST_PROJECT = new Project("0", 0, 10);

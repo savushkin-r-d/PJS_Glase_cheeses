@@ -18,18 +18,8 @@ import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.QuarkusTest;
+//import io.quarkus.test.junit.QuarkusTest;
 
-@QuarkusTest
-class ProjectJobSchedulingConstraintProviderTest {
-
-    private final ConstraintVerifier<ProjectJobSchedulingConstraintProvider, ProjectJobSchedule> constraintVerifier;
-
-    @Inject
-    public ProjectJobSchedulingConstraintProviderTest(
-            ConstraintVerifier<ProjectJobSchedulingConstraintProvider, ProjectJobSchedule> constraintVerifier) {
-        this.constraintVerifier = constraintVerifier;
-    }
 
     @Test
     void nonRenewableResourceCapacity() {
