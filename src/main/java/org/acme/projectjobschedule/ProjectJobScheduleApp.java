@@ -3,6 +3,7 @@ package org.acme.projectjobschedule;
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;;
+import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.Job;
 import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
@@ -70,6 +71,7 @@ public class ProjectJobScheduleApp {
     public static void main(String[] args) {
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
+                .withEntityClasses(Allocation.class)
                 .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
                 // The solver runs only for 5 seconds on this small dataset.
                 // It's recommended to run for at least 5 minutes ("5m") otherwise.
