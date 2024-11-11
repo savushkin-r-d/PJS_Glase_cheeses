@@ -1,4 +1,4 @@
-package org.acme.projectjobschedule.solver;
+package org.acme.projectjobschedule;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Assumptions;
