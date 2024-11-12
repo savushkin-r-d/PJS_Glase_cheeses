@@ -20,7 +20,7 @@
         <version.compiler.plugin>3.13.0</version.compiler.plugin>
         <version.surefire.plugin>3.5.1</version.surefire.plugin>
         <version.assembly.plugin>3.7.1</version.assembly.plugin>
-        
+
         <sonar.organization>savushkin-r-d</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
@@ -75,7 +75,6 @@
         <artifactId>jackson-databind</artifactId>
         <version>2.15.0</version>
     </dependency>
-
     <!-- Testing -->
     <dependency>
         <groupId>ai.timefold.solver</groupId>
@@ -93,9 +92,8 @@
         <version>${version.org.assertj}</version>
         <scope>test</scope>
     </dependency>
-
-
 </dependencies>
+
 <build>
 <plugins>
     <plugin>
@@ -153,4 +151,4 @@
     </plugin>
 </plugins>
 </build>
-        </project>
+</project>
