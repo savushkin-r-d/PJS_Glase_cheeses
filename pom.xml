@@ -22,6 +22,11 @@
         <version.assembly.plugin>3.7.1</version.assembly.plugin>
     </properties>
 
+    <properties>
+        <sonar.organization>savushkin-r-d</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
 <dependencyManagement>
 <dependencies>
     <dependency>
