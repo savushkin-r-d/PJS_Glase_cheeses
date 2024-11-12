@@ -28,7 +28,7 @@ public class ProjectJobScheduleApp {
         LARGE
     }
 
-    public static void main(String[] args) {
+    public static void man(String[] args) {
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
                 .withEntityClasses(Allocation.class)
