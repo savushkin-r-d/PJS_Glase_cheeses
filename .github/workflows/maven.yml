@@ -3,7 +3,7 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "main" ]
-  pull_request_target:
+  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-      
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
