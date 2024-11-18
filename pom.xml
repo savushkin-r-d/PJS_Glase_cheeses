@@ -21,9 +21,8 @@
         <version.surefire.plugin>3.5.1</version.surefire.plugin>
         <version.assembly.plugin>3.7.1</version.assembly.plugin>
 
-        <sonar.organization>savushkin-r-d</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>savushkin-r-d_APCS-PDSystem</sonar.projectKey>
+       <sonar.organization>nogameno-life</sonar.organization>
+       <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
 <dependencyManagement>
