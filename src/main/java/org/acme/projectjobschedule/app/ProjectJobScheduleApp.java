@@ -19,11 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.io.File;
 
 public class ProjectJobScheduleApp {
@@ -37,14 +34,6 @@ public class ProjectJobScheduleApp {
 
     public static void main(String[] args) {
 
-        ProjectJobSchedule problem;
-        try {
-            problem = importFromXML("../data/data.xml");
-        } catch (JAXBException e) {
-            LOGGER.error("Ошибка импорта XML: " + e.getMessage());
-            return;
-        }
-
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
                 .withEntityClasses(Allocation.class)
@@ -57,6 +46,9 @@ public class ProjectJobScheduleApp {
      //   DemoDataGenerator demo_data = new DemoDataGenerator();
       //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
+        // Load the problem from JSON
+        ProjectJobSchedule problem = importFromJson("../data/data.json");
+
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
         ProjectJobSchedule solution = solver.solve(problem);
@@ -64,25 +56,16 @@ public class ProjectJobScheduleApp {
         // Visualize the solution
        printProjectJobSchedule(solution);
 
-        // Экспортировать решение в XML
+    }
+
+    public static ProjectJobSchedule importFromJson(String filePath) {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            exportToXML(solution, "solution.xml");
-        } catch (JAXBException e) {
-            LOGGER.error("Ошибка экспорта XML: " + e.getMessage());
+            return objectMapper.readValue(new File(filePath), ProjectJobSchedule.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-    }
-
-    public static ProjectJobSchedule importFromXML(String filePath) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(ProjectJobSchedule.class);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        return (ProjectJobSchedule) unmarshaller.unmarshal(new File(filePath));
-    }
-
-    public static void exportToXML(ProjectJobSchedule schedule, String filePath) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(ProjectJobSchedule.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(schedule, new File(filePath));
     }
 
     public static void  printProjectJobSchedule(ProjectJobSchedule schedule){

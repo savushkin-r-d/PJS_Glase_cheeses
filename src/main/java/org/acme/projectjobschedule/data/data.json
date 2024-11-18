@@ -1,0 +1,38 @@
+{
+  "projects": [
+    {
+      "id": "P1",
+      "releaseDate": "2023-10-01"
+    },
+    {
+      "id": "P2",
+      "releaseDate": "2023-11-01"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "J1",
+      "jobType": "TypeA",
+      "project": {
+        "id": "P1",
+        "releaseDate": "2023-10-01"
+      }
+    },
+    {
+      "id": "J2",
+      "jobType": "TypeB",
+      "project": {
+        "id": "P1",
+        "releaseDate": "2023-10-01"
+      }
+    },
+    {
+      "id": "J3",
+      "jobType": "TypeC",
+      "project": {
+        "id": "P2",
+        "releaseDate": "2023-11-01"
+      }
+    }
+  ]
+}
