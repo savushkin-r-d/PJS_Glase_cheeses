@@ -2,37 +2,167 @@
   "projects": [
     {
       "id": "P1",
-      "releaseDate": "2023-10-01"
+      "releaseDate": 20231001
     },
     {
       "id": "P2",
-      "releaseDate": "2023-11-01"
+      "releaseDate": 20231101
+    }
+  ],
+  "resources": [
+    {
+      "@type": "global",
+      "id": "R1",
+      "capacity": 100
+    },
+    {
+      "@type": "local",
+      "id": "R2",
+      "capacity": 50
     }
   ],
   "jobs": [
     {
       "id": "J1",
-      "jobType": "TypeA",
+      "jobType": "SOURCE",
       "project": {
         "id": "P1",
-        "releaseDate": "2023-10-01"
-      }
+        "releaseDate": 20231001
+      },
+      "executionModes": [
+        {
+          "id": "EM1",
+          "name": "Mode 1",
+          "resourceRequirements": [
+            {
+              "id": "RR1",
+              "resource": {
+                "@type": "global",
+                "id": "R1",
+                "capacity": 100
+              },
+              "quantity": 1
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "J2",
-      "jobType": "TypeB",
+      "jobType": "STANDARD",
       "project": {
         "id": "P1",
-        "releaseDate": "2023-10-01"
-      }
+        "releaseDate": 20231001
+      },
+      "executionModes": [
+        {
+          "id": "EM2",
+          "name": "Mode 2",
+          "resourceRequirements": [
+            {
+              "id": "RR2",
+              "resource": {
+                "@type": "local",
+                "id": "R2",
+                "capacity": 50
+              },
+              "quantity": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "allocations": [
+    {
+      "id": "A1",
+      "job": {
+        "id": "J1",
+        "jobType": "SOURCE",
+        "project": {
+          "id": "P1",
+          "releaseDate": 20231001
+        },
+        "executionModes": [
+          {
+            "id": "EM1",
+            "name": "Mode 1",
+            "resourceRequirements": [
+              {
+                "id": "RR1",
+                "resource": {
+                  "@type": "global",
+                  "id": "R1",
+                  "capacity": 100
+                },
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      "executionMode": {
+        "id": "EM1",
+        "name": "Mode 1",
+        "resourceRequirements": [
+          {
+            "id": "RR1",
+            "resource": {
+              "@type": "global",
+              "id": "R1",
+              "capacity": 100
+            },
+            "quantity": 1
+          }
+        ]
+      },
+      "startDate": "2023-10-01T00:00:00Z",
+      "endDate": "2023-10-02T00:00:00Z"
     },
     {
-      "id": "J3",
-      "jobType": "TypeC",
-      "project": {
-        "id": "P2",
-        "releaseDate": "2023-11-01"
-      }
+      "id": "A2",
+      "job": {
+        "id": "J2",
+        "jobType": "STANDARD",
+        "project": {
+          "id": "P1",
+          "releaseDate": 20231001
+        },
+        "executionModes": [
+          {
+            "id": "EM2",
+            "name": "Mode 2",
+            "resourceRequirements": [
+              {
+                "id": "RR2",
+                "resource": {
+                  "@type": "local",
+                  "id": "R2",
+                  "capacity": 50
+                },
+                "quantity": 2
+              }
+            ]
+          }
+        ]
+      },
+      "executionMode": {
+        "id": "EM2",
+        "name": "Mode 2",
+        "resourceRequirements": [
+          {
+            "id": "RR2",
+            "resource": {
+              "@type": "local",
+              "id": "R2",
+              "capacity": 50
+            },
+            "quantity": 2
+          }
+        ]
+      },
+      "startDate": "2023-10-02T00:00:00Z",
+      "endDate": "2023-10-03T00:00:00Z"
     }
   ]
 }

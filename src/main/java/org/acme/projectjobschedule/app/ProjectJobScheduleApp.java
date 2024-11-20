@@ -2,7 +2,7 @@ package org.acme.projectjobschedule.app;
 
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
-import ai.timefold.solver.core.config.solver.SolverConfig;;
+import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.Job;
 import org.acme.projectjobschedule.domain.Project;
@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ProjectJobScheduleApp {
 
@@ -47,8 +49,15 @@ public class ProjectJobScheduleApp {
       //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Load the problem from JSON
-        ProjectJobSchedule problem = importFromJson("../data/data.json");
+        String relativePath = "src/main/java/org/acme/projectjobschedule/data/data.json";
+        ProjectJobSchedule problem = importFromJson(relativePath);
 
+        if (problem != null) {
+            System.out.println("Projects: " + problem.getProjects());
+            System.out.println("Resources: " + problem.getResources());
+            System.out.println("Jobs: " + problem.getJobs());
+            System.out.println("Allocations: " + problem.getAllocations());
+        }
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
         ProjectJobSchedule solution = solver.solve(problem);
@@ -58,10 +67,11 @@ public class ProjectJobScheduleApp {
 
     }
 
-    public static ProjectJobSchedule importFromJson(String filePath) {
+    public static ProjectJobSchedule importFromJson(String relativePath) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(new File(filePath), ProjectJobSchedule.class);
+            Path path = Paths.get(relativePath).toAbsolutePath();
+            return objectMapper.readValue(path.toFile(), ProjectJobSchedule.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
