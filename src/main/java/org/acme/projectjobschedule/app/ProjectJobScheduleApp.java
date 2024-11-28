@@ -21,9 +21,10 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.File;
+import org.acme.projectjobschedule.app.JsonImporter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 public class ProjectJobScheduleApp {
 
@@ -33,6 +34,7 @@ public class ProjectJobScheduleApp {
         SMALL,
         LARGE
     }
+
 
     public static void main(String[] args) {
 
@@ -49,33 +51,25 @@ public class ProjectJobScheduleApp {
       //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Load the problem from JSON
-        String relativePath = "src/main/java/org/acme/projectjobschedule/data/data.json";
-        ProjectJobSchedule problem = importFromJson(relativePath);
-
-        if (problem != null) {
-            System.out.println("Projects: " + problem.getProjects());
-            System.out.println("Resources: " + problem.getResources());
-            System.out.println("Jobs: " + problem.getJobs());
-            System.out.println("Allocations: " + problem.getAllocations());
-        }
-        // Solve the problem
-        Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
-        ProjectJobSchedule solution = solver.solve(problem);
-
-        // Visualize the solution
-       printProjectJobSchedule(solution);
-
-    }
-
-    public static ProjectJobSchedule importFromJson(String relativePath) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonImporter importer = new JsonImporter();
         try {
-            Path path = Paths.get(relativePath).toAbsolutePath();
-            return objectMapper.readValue(path.toFile(), ProjectJobSchedule.class);
+            ProjectJobSchedule problem = importer.importFromJson("src/main/resources/data.json");
+            // Теперь у вас есть объект ProjectJobSchedule, заполненный данными из JSON-файла
+            System.out.println(problem);
+
+            // Solve the problem
+            Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
+            ProjectJobSchedule solution = solver.solve(problem);
+
+            // Visualize the solution
+            printProjectJobSchedule(solution);
+
+            // Visualize the solution
+            printProjectJobSchedule(solution);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
+
     }
 
     public static void  printProjectJobSchedule(ProjectJobSchedule schedule){

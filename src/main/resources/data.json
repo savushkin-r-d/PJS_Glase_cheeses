@@ -1,0 +1,61 @@
+{
+  "projects": [
+    {
+      "id": "P1",
+      "releaseDate": 10,
+      "criticalPathDuration": 50
+    },
+    {
+      "id": "P2",
+      "releaseDate": 15,
+      "criticalPathDuration": 60
+    }
+  ],
+  "resources": [
+    {
+      "id": "R1",
+      "capacity": 100,
+      "@type": "global"
+    },
+    {
+      "id": "R2",
+      "capacity": 200,
+      "@type": "local"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "J1",
+      "project": "P1",
+      "jobType": "SOURCE"
+    },
+    {
+      "id": "J2",
+      "project": "P1",
+      "jobType": "STANDARD"
+    },
+    {
+      "id": "J3",
+      "project": "P2",
+      "jobType": "SINK"
+    }
+  ],
+  "allocations": [
+    {
+      "id": "A1",
+      "job": "J1",
+      "sourceAllocation": "A1",
+      "sinkAllocation": "A2",
+      "predecessorAllocations": ["A1"],
+      "successorAllocations": ["A2"]
+    },
+    {
+      "id": "A2",
+      "job": "J2",
+      "sourceAllocation": "A1",
+      "sinkAllocation": "A2",
+      "predecessorAllocations": ["A1"],
+      "successorAllocations": ["A2"]
+    }
+  ]
+}

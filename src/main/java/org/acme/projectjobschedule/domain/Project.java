@@ -16,7 +16,7 @@ public class Project {
 
     public Project() {
     }
-    @JsonIdentityReference(alwaysAsId = true)
+
     public Project(String id) {
         this.id = id;
     }
