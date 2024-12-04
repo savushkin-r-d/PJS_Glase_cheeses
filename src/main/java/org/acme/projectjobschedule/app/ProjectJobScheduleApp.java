@@ -12,6 +12,7 @@ import org.acme.projectjobschedule.data.DemoDataGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.time.Duration;
 
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import org.acme.projectjobschedule.app.JsonImporter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 
 public class ProjectJobScheduleApp {
@@ -51,24 +53,15 @@ public class ProjectJobScheduleApp {
       //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Load the problem from JSON
-        JsonImporter importer = new JsonImporter();
-        try {
-            ProjectJobSchedule problem = importer.importFromJson("src/main/resources/data.json");
-            // Теперь у вас есть объект ProjectJobSchedule, заполненный данными из JSON-файла
-            System.out.println(problem);
 
-            // Solve the problem
-            Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
-            ProjectJobSchedule solution = solver.solve(problem);
+            JsonImporter importer = new JsonImporter();
+            try {
+                ProjectJobSchedule schedule = importer.importFromJson(new File("src/main/resources/data.json"));
+                // Здесь можно добавить логику для обработки schedule
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            // Visualize the solution
-            printProjectJobSchedule(solution);
-
-            // Visualize the solution
-            printProjectJobSchedule(solution);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
