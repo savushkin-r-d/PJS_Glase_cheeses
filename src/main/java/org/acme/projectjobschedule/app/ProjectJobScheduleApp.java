@@ -56,7 +56,7 @@ public class ProjectJobScheduleApp {
 
             JsonImporter importer = new JsonImporter();
             try {
-                ProjectJobSchedule schedule = importer.importFromJson(new File("src/main/resources/data.json"));
+                ProjectJobSchedule schedule = importer.importFromJson("src/main/resources/data.json");
                 // Здесь можно добавить логику для обработки schedule
             } catch (IOException e) {
                 e.printStackTrace();

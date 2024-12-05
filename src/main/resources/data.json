@@ -7,14 +7,14 @@
     {
       "RID": "Line1",
       "Capacity": 1,
-      "Global": "Yes",
+      "@type": "global",
       "Renewable": "Yes",
       "RestrictionList": []
     },
     {
       "RID": "Line2",
       "Capacity": 1,
-      "Global": "Yes",
+      "@type": "global",
       "Renewable": "Yes",
       "RestrictionList": []
     }
