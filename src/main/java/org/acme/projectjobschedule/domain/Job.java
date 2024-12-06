@@ -19,7 +19,7 @@ public class Job {
     @JsonProperty("ExecutionModeList")
     private List<ExecutionMode> executionModes;
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("ResourceRequirementList")
+    @JsonProperty("SuccessorList")
     private List<Job> successorJobs;
 
     public Job() {

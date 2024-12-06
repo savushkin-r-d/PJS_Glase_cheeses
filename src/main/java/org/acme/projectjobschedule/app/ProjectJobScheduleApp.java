@@ -53,14 +53,10 @@ public class ProjectJobScheduleApp {
       //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Load the problem from JSON
+        String filePath = "src/main/resources/data.json"; // Путь к файлу JSON
 
-            JsonImporter importer = new JsonImporter();
-            try {
-                ProjectJobSchedule schedule = importer.importFromJson("src/main/resources/data.json");
-                // Здесь можно добавить логику для обработки schedule
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // Создание экземпляра JsonImporter
+        JsonImporter importer = new JsonImporter(filePath);
 
 
     }
