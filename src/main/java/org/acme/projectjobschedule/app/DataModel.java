@@ -82,9 +82,10 @@ public class DataModel {
         for (JsonObject jobObject : jobArray.getValuesAs(JsonObject.class)) {
             Job job = new Job();
             job.setId(jobObject.getString("JID"));
-            job.setSuccessorJobs(jobObject.getJsonArray("SuccessorList"));
+            //job.setSuccessorJobs(jobObject.getJsonArray("SuccessorList").getValuesAs(Job.class));
             setExecutionModeList(jsonObject);
             job.setExecutionModes(getexecutionModeList());
+
             this.jobs.add(job);
         }
     }
@@ -96,9 +97,9 @@ public class DataModel {
     public void setResourceList(JsonObject jsonObject){
         JsonArray resourcesArray = jsonObject.getJsonArray("ResourceList");
         for (JsonObject resourceObject : resourcesArray.getValuesAs(JsonObject.class)) {
-            if(resourceObject.getString("@type") == "local"){
+            if(resourceObject.getString("@type").equals("local")){
                 LocalResource localResource = new LocalResource();
-                localResource.setId((resourceObject.getString("RID")),
+                localResource.setId(resourceObject.getString("RID"));
                 localResource.setCapacity(resourceObject.getInt("Capacity"));
                 localResource.setRenewable(resourceObject.getBoolean("Renewable"));
                // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
@@ -133,9 +134,12 @@ public class DataModel {
                 resourceRequirement.setRequirement(resourceRequirementObject.getInt("Requirement"));
                 resourceRequirementList.add(resourceRequirement);
             }
+
             executionMode.setResourceRequirements(resourceRequirementList);
             this.executionModeList.add(executionMode);
 
         }
+
+
     }
 }
