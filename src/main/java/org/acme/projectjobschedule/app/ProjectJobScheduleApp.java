@@ -9,6 +9,7 @@ import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
 import org.acme.projectjobschedule.data.DemoDataGenerator;
+import org.acme.projectjobschedule.app.DataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,7 @@ public class ProjectJobScheduleApp {
 
         // Создание экземпляра JsonImporter
         JsonImporter importer = new JsonImporter(filePath);
-
+        ProjectJobSchedule problem = importer.initProjectJobSheduleObject();
 
     }
 

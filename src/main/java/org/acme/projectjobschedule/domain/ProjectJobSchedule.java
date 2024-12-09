@@ -48,9 +48,9 @@ public class ProjectJobSchedule {
         this.projects = projects;
         this.resources = resources;
         this.jobs = jobs;
-        // this.allocations = allocations;
-       // this.executionModes = jobs.stream().flatMap(job -> job.getExecutionModes().stream()).toList();
-       // this.resourceRequirements = executionModes.stream().flatMap(e -> e.getResourceRequirements().stream()).toList();
+        this.allocations = allocations;
+        this.executionModes = jobs.stream().flatMap(job -> job.getExecutionModes().stream()).toList();
+        this.resourceRequirements = executionModes.stream().flatMap(e -> e.getResourceRequirements().stream()).toList();
     }
 
     public ProjectJobSchedule(HardMediumSoftScore score, SolverStatus solverStatus) {

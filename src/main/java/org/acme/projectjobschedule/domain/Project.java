@@ -43,6 +43,37 @@ public class Project {
         this.id = id;
     }
 
+    public  int getVb (int vb ){
+        return vb;
+    }
+
+    public  void setVb (int vb ){
+        this.vb= vb;
+    }
+
+    public int getPriority(){
+        return priority;
+    }
+
+    public void setPriority(int priority){
+        this.priority=priority;
+    }
+
+    public String getGtin(String gtin){
+        return gtin;
+    }
+
+    public void setGtin(String gtin){
+        this.gtin=gtin;
+    }
+
+    public  int getNp(int np){
+        return np;
+    }
+
+    public void setNp(int np){
+        this.np=np;
+    }
     public int getReleaseDate() {
         return releaseDate;
     }

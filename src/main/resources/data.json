@@ -8,14 +8,14 @@
       "RID": "Line1",
       "Capacity": 1,
       "@type": "global",
-      "Renewable": "Yes",
+      "Renewable": true,
       "RestrictionList": []
     },
     {
       "RID": "Line2",
       "Capacity": 1,
       "@type": "global",
-      "Renewable": "Yes",
+      "Renewable": true,
       "RestrictionList": []
     }
   ],

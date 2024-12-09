@@ -1,5 +1,6 @@
 package org.acme.projectjobschedule.domain.resource;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -22,6 +23,7 @@ public abstract class Resource {
     @JsonProperty("Capacity")
     private int capacity;
     private boolean renewable;
+
     protected Resource() {
     }
 
