@@ -29,19 +29,14 @@ public class JsonImporter {
 
     }
 
-    public DataModel getDatafromJson(){
-        DataModel model = new DataModel();
-        model= loadFromFile(filepath);
-        return model;
-    }
-
     public ProjectJobSchedule initProjectJobSheduleObject(){
         ProjectJobSchedule pjs = new ProjectJobSchedule();
         DataModel model = new DataModel();
+        model=loadFromFile(filepath);
         pjs.setJobs(model.getJobList());
         pjs.setProjects(model.getProjectList());
         pjs.setResources(model.getResourceList());
-
+        printDataObject(model);
         return pjs;
     }
     private DataModel loadFromFile(String filePath) {
@@ -49,7 +44,8 @@ public class JsonImporter {
         try (FileInputStream fis = new FileInputStream(filePath);
              JsonReader jsonReader = Json.createReader(fis)) {
             // Чтение JSON
-            JsonObject jsonObject = jsonReader.readObject();
+            JsonObject jsonObject;
+            jsonObject = jsonReader.readObject();
 
             // Инициализация объекта DataModel
             dataModel.setJobList(jsonObject);

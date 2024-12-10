@@ -106,6 +106,7 @@ public class DataModel {
                 localResource.setRenewable(resourceObject.getBoolean("Renewable"));
                 // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
                 this.resources.add(localResource);
+
             } else {
                 GlobalResource globalResource = new GlobalResource();
                 globalResource.setId(resourceObject.getString("RID"));
