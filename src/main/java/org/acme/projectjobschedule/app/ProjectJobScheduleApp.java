@@ -8,26 +8,16 @@ import org.acme.projectjobschedule.domain.Job;
 import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
-import org.acme.projectjobschedule.data.DemoDataGenerator;
-import org.acme.projectjobschedule.app.DataModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.time.Duration;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import org.acme.projectjobschedule.app.JsonImporter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-
 
 public class ProjectJobScheduleApp {
 

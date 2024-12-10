@@ -1,6 +1,8 @@
 package org.acme.projectjobschedule.app;
 
-import org.acme.projectjobschedule.domain.ProjectJobSchedule;
+import org.acme.projectjobschedule.domain.*;
+import org.acme.projectjobschedule.domain.resource.Resource;
+import org.acme.projectjobschedule.app.DataModel;
 
 import java.io.IOException;
 import javax.json.Json;
@@ -63,5 +65,53 @@ public class JsonImporter {
 
         }
         return dataModel;
+    }
+
+    public void printDataObject(DataModel model){
+        if (model != null) {
+            System.out.println("ID: " + model.getId());
+            System.out.println("StartDate: " + model.getStartDate());
+            System.out.println("EndDate: " + model.getEndDate());
+            System.out.println("Termination: " + model.getTermination());
+
+            System.out.println("ResourceList:");
+            for (Resource resource : model.getResourceList()) {
+                System.out.println("  RID: " + resource.getId());
+                System.out.println("  Capacity: " + resource.getCapacity());
+                System.out.println("  Renewable: " + resource.isRenewable());
+                //  System.out.println("  RestrictionList: " + resource.getRestrictionList());
+            }
+
+            System.out.println("JobList:");
+            for (Job job : model.getJobList()) {
+                System.out.println("  JID: " + job.getId());
+                //System.out.println("  SuccessorList: " + job.getSuccessorList());
+                System.out.println("  ExecutionModeList:");
+                for (ExecutionMode executionMode : job.getExecutionModes()) {
+                    System.out.println("    JID: " + executionMode.getId());
+                    System.out.println("    Duration: " + executionMode.getDuration());
+
+                    System.out.println("    ResourceRequirementList:");
+                    for (ResourceRequirement resourceRequirement : executionMode.getResourceRequirements()) {
+                        System.out.println("      RID: " + resourceRequirement.getId());
+                        System.out.println("      Requirement: " + resourceRequirement.getRequirement());
+                    }
+                }
+            }
+
+            System.out.println("ProjectList:");
+            for (Project project : model.getProjectList()) {
+                System.out.println("  PID: " + project.getId());
+                System.out.println("  Priority: " + project.getPriority());
+                System.out.println("  VB: " + project.getVb());
+                System.out.println("  GTIN: " + project.getGtin());
+                System.out.println("  NP: " + project.getNp());
+
+            }
+
+        } else {
+            System.out.println("DataModel is not loaded.");
+        }
+
     }
 }

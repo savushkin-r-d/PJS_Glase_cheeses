@@ -43,7 +43,7 @@ public class Project {
         this.id = id;
     }
 
-    public  int getVb (int vb ){
+    public  int getVb (){
         return vb;
     }
 
@@ -59,7 +59,7 @@ public class Project {
         this.priority=priority;
     }
 
-    public String getGtin(String gtin){
+    public String getGtin(){
         return gtin;
     }
 
@@ -67,7 +67,7 @@ public class Project {
         this.gtin=gtin;
     }
 
-    public  int getNp(int np){
+    public  int getNp(){
         return np;
     }
 

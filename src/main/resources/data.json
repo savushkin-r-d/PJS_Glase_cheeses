@@ -22,15 +22,15 @@
 
   "JobList": [
     {
-      "JID": "SOURCE",
+      "JID": "SOURCE"
      // "SuccessorList": ["Job1"]
     },
     {
-      "JID": "Job1",
+      "JID": "Job1"
       //"SuccessorList": ["SINK"]
     },
     {
-      "JID": "SINK",
+      "JID": "SINK"
      // "SuccessorList": []
     }
   ],

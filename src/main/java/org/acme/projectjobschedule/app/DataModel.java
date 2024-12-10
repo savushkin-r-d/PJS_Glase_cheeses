@@ -25,42 +25,43 @@ public class DataModel {
     List<ExecutionMode> executionModeList = new ArrayList<ExecutionMode>();
     List<Job> jobs = new ArrayList<Job>();
 
-    public String getId(){
+    public String getId() {
         return id;
     }
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getStartDate(){
+    public String getStartDate() {
         return StartDate;
     }
 
-    public void setStartDate(String StartDate){
-        this.StartDate=StartDate;
+    public void setStartDate(String StartDate) {
+        this.StartDate = StartDate;
     }
 
-    public String getEndDateDate(){
+    public String getEndDate() {
         return EndDate;
     }
 
-    public void setEndDate(String EndDate){
-        this.StartDate=EndDate;
+    public void setEndDate(String EndDate) {
+        this.StartDate = EndDate;
     }
 
-    public String getTermination(){
+    public String getTermination() {
         return Termination;
     }
 
-    public void setTermination(String Termination){
-        this.Termination=Termination;
+    public void setTermination(String Termination) {
+        this.Termination = Termination;
     }
 
-    public List<Project> getProjectList(){
+    public List<Project> getProjectList() {
         return projects;
     }
-    public void setProjectList(JsonObject jsonObject){
+
+    public void setProjectList(JsonObject jsonObject) {
         JsonArray projectsArray = jsonObject.getJsonArray("ProjectList");
         for (JsonObject projectObject : projectsArray.getValuesAs(JsonObject.class)) {
             Project project = new Project();
@@ -70,14 +71,15 @@ public class DataModel {
             project.setGtin(projectObject.getString("GTIN"));
             project.setNp(projectObject.getInt("NP"));
             this.projects.add(project);
-    }
+        }
 
     }
 
-    public List<Job> getJobList(){
+    public List<Job> getJobList() {
         return jobs;
     }
-    public void setJobList(JsonObject jsonObject){
+
+    public void setJobList(JsonObject jsonObject) {
         JsonArray jobArray = jsonObject.getJsonArray("JobList");
         for (JsonObject jobObject : jobArray.getValuesAs(JsonObject.class)) {
             Job job = new Job();
@@ -90,32 +92,31 @@ public class DataModel {
         }
     }
 
-    public List<Resource> getResourceList(){
+    public List<Resource> getResourceList() {
         return resources;
     }
 
-    public void setResourceList(JsonObject jsonObject){
+    public void setResourceList(JsonObject jsonObject) {
         JsonArray resourcesArray = jsonObject.getJsonArray("ResourceList");
         for (JsonObject resourceObject : resourcesArray.getValuesAs(JsonObject.class)) {
-            if(resourceObject.getString("@type").equals("local")){
+            if (resourceObject.getString("@type").equals("local")) {
                 LocalResource localResource = new LocalResource();
                 localResource.setId(resourceObject.getString("RID"));
                 localResource.setCapacity(resourceObject.getInt("Capacity"));
                 localResource.setRenewable(resourceObject.getBoolean("Renewable"));
-               // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
+                // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
                 this.resources.add(localResource);
+            } else {
+                GlobalResource globalResource = new GlobalResource();
+                globalResource.setId(resourceObject.getString("RID"));
+                globalResource.setCapacity(resourceObject.getInt("Capacity"));
+                //resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
+                this.resources.add(globalResource);
             }
-            else{
-            GlobalResource globalResource = new GlobalResource();
-            globalResource.setId(resourceObject.getString("RID"));
-            globalResource.setCapacity(resourceObject.getInt("Capacity"));
-            //resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
-            this.resources.add(globalResource);
         }
     }
-    }
 
-    public List<ExecutionMode> getexecutionModeList(){
+    public List<ExecutionMode> getexecutionModeList() {
         return executionModeList;
     }
 
@@ -139,7 +140,5 @@ public class DataModel {
             this.executionModeList.add(executionMode);
 
         }
-
-
     }
 }
