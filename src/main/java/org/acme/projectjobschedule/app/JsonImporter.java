@@ -48,16 +48,14 @@ public class JsonImporter {
             // Читаем JSON-файл в JsonNode
             JsonNode rootNode = objectMapper.readTree(new File(filePath));
 
-
-
             // Инициализация объекта DataModel
             dataModel.setJobList(rootNode);
-            dataModel.setProjectList(jrootNode);
+            dataModel.setProjectList(rootNode);
             dataModel.setResourceList(rootNode);
-            dataModel.setId(jsonObject.getString("ID"));
-            dataModel.setStartDate(jsonObject.getString("StartDate"));
-            dataModel.setEndDate(jsonObject.getString("EndDate"));
-            dataModel.setTermination(jsonObject.getString("Termination"));
+            dataModel.setId(rootNode.get("ID").asText());
+            dataModel.setStartDate(rootNode.get("StartDate").asText());
+            dataModel.setEndDate(rootNode.get("EndDate").asText());
+            dataModel.setTermination(rootNode.get("Termination").asText());
 
         } catch (IOException e) {
             e.printStackTrace();
