@@ -3,13 +3,15 @@ package org.acme.projectjobschedule.app;
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.app.DataModel;
-
+import java.io.File;
+import java.io.IOException;
 import java.io.IOException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.FileInputStream;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 public class JsonImporter {
     private String filepath;
 
@@ -40,17 +42,18 @@ public class JsonImporter {
         return pjs;
     }
     private DataModel loadFromFile(String filePath) {
+        ObjectMapper objectMapper = new ObjectMapper();
         DataModel dataModel = new DataModel();
-        try (FileInputStream fis = new FileInputStream(filePath);
-             JsonReader jsonReader = Json.createReader(fis)) {
-            // Чтение JSON
-            JsonObject jsonObject;
-            jsonObject = jsonReader.readObject();
+        try  {
+            // Читаем JSON-файл в JsonNode
+            JsonNode rootNode = objectMapper.readTree(new File(filePath));
+
+
 
             // Инициализация объекта DataModel
-            dataModel.setJobList(jsonObject);
-            dataModel.setProjectList(jsonObject);
-            dataModel.setResourceList(jsonObject);
+            dataModel.setJobList(rootNode);
+            dataModel.setProjectList(jrootNode);
+            dataModel.setResourceList(rootNode);
             dataModel.setId(jsonObject.getString("ID"));
             dataModel.setStartDate(jsonObject.getString("StartDate"));
             dataModel.setEndDate(jsonObject.getString("EndDate"));

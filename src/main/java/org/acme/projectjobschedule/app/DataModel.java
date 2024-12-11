@@ -12,7 +12,9 @@ import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.domain.resource.GlobalResource;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.acme.projectjobschedule.domain.resource.Resource;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import org.acme.projectjobschedule.domain.ExecutionMode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 public class DataModel {
 
     private String id;
@@ -24,6 +26,8 @@ public class DataModel {
     List<Resource> resources = new ArrayList<Resource>();
     List<ExecutionMode> executionModeList = new ArrayList<ExecutionMode>();
     List<Job> jobs = new ArrayList<Job>();
+    List<String> successorJobs = new ArrayList<String>();
+    List<ExecutionMode> executionModes = new ArrayList<ExecutionMode>();
 
     public String getId() {
         return id;
@@ -61,33 +65,52 @@ public class DataModel {
         return projects;
     }
 
-    public void setProjectList(JsonObject jsonObject) {
-        JsonArray projectsArray = jsonObject.getJsonArray("ProjectList");
-        for (JsonObject projectObject : projectsArray.getValuesAs(JsonObject.class)) {
-            Project project = new Project();
-            project.setId(projectObject.getString("PID"));
-            project.setPriority(projectObject.getInt("Priority"));
-            project.setVb(projectObject.getInt("VB"));
-            project.setGtin(projectObject.getString("GTIN"));
-            project.setNp(projectObject.getInt("NP"));
-            this.projects.add(project);
-        }
+    public void setProjectList(JsonNode rootNode) {
+        JsonNode projectListNode = rootNode.get("ProjectList");
+        if (projectListNode.isArray()) {
+            for (JsonNode projectNode : projectListNode) {
+                Project project = new Project();
+                project.setId(projectNode.get("PID").asText());
+                project.setPriority(projectNode.get("Priority").asInt());
+                project.setVb(projectNode.get("VB").asInt());
+                project.setGtin(projectNode.get("GTIN").asText());
+                project.setNp(projectNode.get("NP").asInt());
+                this.projects.add(project);
 
+                JsonNode executionModeListNode = projectNode.get("ExecutionModeList");
+                if (executionModeListNode.isArray()) {
+                    for (JsonNode executionModeNode : executionModeListNode) {
+                        ExecutionMode executionMode = new ExecutionMode();
+                        executionMode.setId(executionModeNode.get("JID").asText());
+                        executionModeNode.get("Duration").asInt();
+
+                        JsonNode resourceRequirementListNode = executionModeNode.get("ResourceRequirementList");
+                        if (resourceRequirementListNode.isArray()) {
+                            for (JsonNode resourceRequirementNode : resourceRequirementListNode) {
+                                ResourceRequirement requirement = new ResourceRequirement();
+                                requirement.setId(resourceRequirementNode.get("RID").asText());
+                                requirement.setRequirement(resourceRequirementNode.get("Requirement").asInt());
+                            }
+                        }
+                        this.executionModeList.add(executionMode);
+                    }
+
+                }
+            }
+
+        }
     }
 
     public List<Job> getJobList() {
         return jobs;
     }
 
-    public void setJobList(JsonObject jsonObject) {
-        JsonArray jobArray = jsonObject.getJsonArray("JobList");
-        for (JsonObject jobObject : jobArray.getValuesAs(JsonObject.class)) {
-            Job job = new Job();
-            job.setId(jobObject.getString("JID"));
-            //job.setSuccessorJobs(jobObject.getJsonArray("SuccessorList").getValuesAs(Job.class));
-            setExecutionModeList(jsonObject);
-            job.setExecutionModes(getexecutionModeList());
+    public void setJobList(JsonNode rootNode) {
+        JsonNode jobListNode = rootNode.get("JobList");
 
+        for (JsonNode jobNode : jobListNode) {
+            Job job = new Job();
+            job.setId(jobNode.get("JID").asText());
             this.jobs.add(job);
         }
     }
@@ -96,50 +119,32 @@ public class DataModel {
         return resources;
     }
 
-    public void setResourceList(JsonObject jsonObject) {
-        JsonArray resourcesArray = jsonObject.getJsonArray("ResourceList");
-        for (JsonObject resourceObject : resourcesArray.getValuesAs(JsonObject.class)) {
-            if (resourceObject.getString("@type").equals("local")) {
-                LocalResource localResource = new LocalResource();
-                localResource.setId(resourceObject.getString("RID"));
-                localResource.setCapacity(resourceObject.getInt("Capacity"));
-                localResource.setRenewable(resourceObject.getBoolean("Renewable"));
-                // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
-                this.resources.add(localResource);
+    public void setResourceList(JsonNode rootNode) {
+        JsonNode resourceListNode = rootNode.get("ResourceList");
+        if (resourceListNode.isArray()) {
+            for (JsonNode resourceNode : resourceListNode) {
+                if (resourceNode.get("@type").asText().equals("local")) {
+                    LocalResource localResource = new LocalResource();
+                    localResource.setId(resourceNode.get("RID").asText());
+                    localResource.setCapacity(resourceNode.get("Capacity").asInt());
+                    localResource.setRenewable(resourceNode.get("Renewable").asBoolean());
+                    // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
+                    this.resources.add(localResource);
 
-            } else {
-                GlobalResource globalResource = new GlobalResource();
-                globalResource.setId(resourceObject.getString("RID"));
-                globalResource.setCapacity(resourceObject.getInt("Capacity"));
-                //resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
-                this.resources.add(globalResource);
+                } else {
+                    GlobalResource globalResource = new GlobalResource();
+                    globalResource.setId(resourceNode.get("RID").asText());
+                    globalResource.setCapacity(resourceNode.get("Capacity").asInt());
+                    //globalResource.setRenewable(resourceNode.get("Renewable").asBoolean());
+                    // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
+                    this.resources.add(globalResource);
+                }
             }
         }
-    }
 
-    public List<ExecutionMode> getexecutionModeList() {
-        return executionModeList;
-    }
-
-    private void setExecutionModeList(JsonObject jsonObject) {
-        JsonArray executionModeArray = jsonObject.getJsonArray("ExecutionModeList");
-        for (JsonObject executionModeObject : executionModeArray.getValuesAs(JsonObject.class)) {
-            ExecutionMode executionMode = new ExecutionMode();
-            executionMode.setId(executionModeObject.getString("JID"));
-            executionMode.setDuration(executionModeObject.getInt("Duration"));
-
-            List<ResourceRequirement> resourceRequirementList = new ArrayList<>();
-            JsonArray resourceRequirementArray = executionModeObject.getJsonArray("ResourceRequirementList");
-            for (JsonObject resourceRequirementObject : resourceRequirementArray.getValuesAs(JsonObject.class)) {
-                ResourceRequirement resourceRequirement = new ResourceRequirement();
-                resourceRequirement.setId(resourceRequirementObject.getString("RID"));
-                resourceRequirement.setRequirement(resourceRequirementObject.getInt("Requirement"));
-                resourceRequirementList.add(resourceRequirement);
-            }
-
-            executionMode.setResourceRequirements(resourceRequirementList);
-            this.executionModeList.add(executionMode);
-
+        public List<ExecutionMode> getExecutionModeList() {
+            return executionModeList;
         }
+
     }
 }
