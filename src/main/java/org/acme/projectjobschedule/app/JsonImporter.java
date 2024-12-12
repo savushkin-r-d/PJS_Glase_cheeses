@@ -5,13 +5,9 @@ import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.app.DataModel;
 import java.io.File;
 import java.io.IOException;
-import java.io.IOException;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.FileInputStream;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class JsonImporter {
     private String filepath;
 
@@ -31,17 +27,7 @@ public class JsonImporter {
 
     }
 
-    public ProjectJobSchedule initProjectJobSheduleObject(){
-        ProjectJobSchedule pjs = new ProjectJobSchedule();
-        DataModel model = new DataModel();
-        model=loadFromFile(filepath);
-        pjs.setJobs(model.getJobList());
-        pjs.setProjects(model.getProjectList());
-        pjs.setResources(model.getResourceList());
-        printDataObject(model);
-        return pjs;
-    }
-    private DataModel loadFromFile(String filePath) {
+    public DataModel loadFromFile(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();
         DataModel dataModel = new DataModel();
         try  {
@@ -52,6 +38,7 @@ public class JsonImporter {
             dataModel.setJobList(rootNode);
             dataModel.setProjectList(rootNode);
             dataModel.setResourceList(rootNode);
+            dataModel.setRestrictionList(rootNode);
             dataModel.setId(rootNode.get("ID").asText());
             dataModel.setStartDate(rootNode.get("StartDate").asText());
             dataModel.setEndDate(rootNode.get("EndDate").asText());

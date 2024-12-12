@@ -48,8 +48,8 @@ public class ProjectJobScheduleApp {
 
         // Создание экземпляра JsonImporter
         JsonImporter importer = new JsonImporter(filePath);
-        ProjectJobSchedule problem;
-        problem = importer.initProjectJobSheduleObject();
+        DataModel model = importer.loadFromFile(filePath);
+
 
     }
 
