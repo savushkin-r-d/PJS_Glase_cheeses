@@ -1,5 +1,7 @@
 package org.acme.projectjobschedule.app;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,6 +78,7 @@ public class DataModel {
     public void setProjectList(JsonNode rootNode) {
         JsonNode projectListNode = rootNode.get("ProjectList");
         if (projectListNode != null && projectListNode.isArray() && !projectListNode.isEmpty()) {
+            this.projects = new ArrayList<>();
             for (JsonNode projectNode : projectListNode) {
                 Project project = new Project();
                 project.setId(projectNode.get("PID").asText());
@@ -87,12 +90,14 @@ public class DataModel {
 
                 JsonNode executionModeListNode = projectNode.get("ExecutionModeList");
                 if (executionModeListNode != null && executionModeListNode.isArray() && !executionModeListNode.isEmpty()) {
+                    this.executionModeList=new ArrayList<>();
                     for (JsonNode executionModeNode : executionModeListNode) {
                         ExecutionMode executionMode = new ExecutionMode();
                         executionMode.setId(executionModeNode.get("JID").asText());
                         executionModeNode.get("Duration").asInt();
 
                         JsonNode resourceRequirementListNode = executionModeNode.get("ResourceRequirementList");
+                        this.resourceRequirementList = new ArrayList<>();
                         if (resourceRequirementListNode != null && resourceRequirementListNode.isArray() && !resourceRequirementListNode.isEmpty()) {
                             for (JsonNode resourceRequirementNode : resourceRequirementListNode) {
                                 ResourceRequirement requirement = new ResourceRequirement();
@@ -117,11 +122,13 @@ public class DataModel {
     public void setJobList(JsonNode rootNode) {
         JsonNode jobListNode = rootNode.get("JobList");
         if (jobListNode != null && jobListNode.isArray() && !jobListNode.isEmpty()) {
+            this.jobs = new ArrayList<>();
             for (JsonNode jobNode : jobListNode) {
                 Job job = new Job();
                 job.setId(jobNode.get("JID").asText());
                 JsonNode successorListNode = jobNode.get("SuccessorList");
                 if (successorListNode != null && successorListNode.isArray() && !successorListNode.isEmpty()) {
+                    this.successorJobs = new ArrayList<>();
                     for (JsonNode successor : successorListNode) {
                         this.successorJobs.add(successor.asText());
                     }
@@ -132,12 +139,16 @@ public class DataModel {
             }
 
         }
+        else{
+            this.jobs = Collections.emptyList();
+        }
     }
 
 
     public void setResourceList(JsonNode rootNode) {
         JsonNode resourceListNode = rootNode.get("ResourceList");
         if (resourceListNode != null && resourceListNode.isArray() && !resourceListNode.isEmpty()) {
+            this.resources =  new ArrayList<>();
             for (JsonNode resourceNode : resourceListNode) {
                 if (resourceNode.get("@type").asText().equals("local")) {
                     LocalResource localResource = new LocalResource();
@@ -148,6 +159,7 @@ public class DataModel {
                     this.resources.add(localResource);
 
                 } else {
+                    this.resources =  new ArrayList<>();
                     GlobalResource globalResource = new GlobalResource();
                     globalResource.setId(resourceNode.get("RID").asText());
                     globalResource.setCapacity(resourceNode.get("Capacity").asInt());
@@ -162,6 +174,7 @@ public class DataModel {
     public void setRestrictionList(JsonNode rootNode) {
         JsonNode jobListNode = rootNode.get("JobList");
         if (jobListNode != null && jobListNode.isArray() && !jobListNode.isEmpty()) {
+            this.RestrictionList = new ArrayList<>();
             for (JsonNode jobNode : jobListNode) {
                 JsonNode RestrictionLosttNode = jobNode.get("RestrictionList");
                 if (RestrictionLosttNode != null && RestrictionLosttNode.isArray() && !RestrictionLosttNode.isEmpty()) {
