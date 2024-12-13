@@ -45,9 +45,11 @@ public class ProjectJobScheduleApp {
         // Load the problem from JSON
         String filePath = "src/main/resources/data.json"; // Путь к файлу JSON
 
-       JsonImporter importer = new JsonImporter();
-       importer.readOperationHashMap(filePath);
-       importer.printOperationHashMap();
+
+       DataModel model = new DataModel(filePath);
+       model.readOperationHashMap();
+       model.printProjects();
+
 
     }
 

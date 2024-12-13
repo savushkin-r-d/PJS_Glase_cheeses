@@ -10,13 +10,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonImporter {
-    private String filepath;
-    Map<String, Object> jsonMap;
+    protected String filepath;
+    protected Map<String, Object> jsonMap;
 
-    public JsonImporter(){
-
+    public JsonImporter(String filepath){
+        this.filepath = filepath;
     }
 
+public  Map<String, Object> getJsonMap(){
+        return jsonMap;
+}
     public String getFilepath(){
         return filepath;
     }
@@ -25,16 +28,11 @@ public class JsonImporter {
         this.filepath = filepath;
     }
 
-    public JsonImporter(String filePath) {
-       this.filepath=filePath;
-    }
-
-
  public void printOperationHashMap(){
     System.out.println(jsonMap);
 }
 
-    public void readOperationHashMap(String filepath) {
+    protected void readOperationHashMap() {
         try {
             // Путь к JSON-файлу
             File jsonFile = new File(filepath);
