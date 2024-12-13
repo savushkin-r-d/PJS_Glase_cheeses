@@ -1,15 +1,8 @@
 package org.acme.projectjobschedule.app;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.acme.projectjobschedule.domain.*;
-import org.acme.projectjobschedule.domain.resource.GlobalResource;
-import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.acme.projectjobschedule.domain.resource.Resource;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.acme.projectjobschedule.domain.ExecutionMode;
 
 public class DataModel {
@@ -73,120 +66,6 @@ public class DataModel {
 
     public List<ExecutionMode> getExecutionModeList() {
         return executionModeList;
-    }
-
-    public void setProjectList(JsonNode rootNode) {
-        JsonNode projectListNode = rootNode.get("ProjectList");
-        if (projectListNode != null && projectListNode.isArray() && !projectListNode.isEmpty()) {
-            this.projects = new ArrayList<>();
-            for (JsonNode projectNode : projectListNode) {
-                Project project = new Project();
-                project.setId(projectNode.get("PID").asText());
-                project.setPriority(projectNode.get("Priority").asInt());
-                project.setVb(projectNode.get("VB").asInt());
-                project.setGtin(projectNode.get("GTIN").asText());
-                project.setNp(projectNode.get("NP").asInt());
-                this.projects.add(project);
-
-                JsonNode executionModeListNode = projectNode.get("ExecutionModeList");
-                if (executionModeListNode != null && executionModeListNode.isArray() && !executionModeListNode.isEmpty()) {
-                    this.executionModeList=new ArrayList<>();
-                    for (JsonNode executionModeNode : executionModeListNode) {
-                        ExecutionMode executionMode = new ExecutionMode();
-                        executionMode.setId(executionModeNode.get("JID").asText());
-                        executionModeNode.get("Duration").asInt();
-
-                        JsonNode resourceRequirementListNode = executionModeNode.get("ResourceRequirementList");
-                        this.resourceRequirementList = new ArrayList<>();
-                        if (resourceRequirementListNode != null && resourceRequirementListNode.isArray() && !resourceRequirementListNode.isEmpty()) {
-                            for (JsonNode resourceRequirementNode : resourceRequirementListNode) {
-                                ResourceRequirement requirement = new ResourceRequirement();
-                                requirement.setId(resourceRequirementNode.get("RID").asText());
-                                requirement.setRequirement(resourceRequirementNode.get("Requirement").asInt());
-                                this.resourceRequirementList.add(requirement);
-                            }
-
-                        } else {
-                            this.resourceRequirementList = Collections.emptyList();
-                        }
-                        this.executionModeList.add(executionMode);
-                    }
-
-                }
-                this.executionModeList = Collections.emptyList();
-            }
-
-        }
-    }
-
-    public void setJobList(JsonNode rootNode) {
-        JsonNode jobListNode = rootNode.get("JobList");
-        if (jobListNode != null && jobListNode.isArray() && !jobListNode.isEmpty()) {
-            this.jobs = new ArrayList<>();
-            for (JsonNode jobNode : jobListNode) {
-                Job job = new Job();
-                job.setId(jobNode.get("JID").asText());
-                JsonNode successorListNode = jobNode.get("SuccessorList");
-                if (successorListNode != null && successorListNode.isArray() && !successorListNode.isEmpty()) {
-                    this.successorJobs = new ArrayList<>();
-                    for (JsonNode successor : successorListNode) {
-                        this.successorJobs.add(successor.asText());
-                    }
-                } else {
-                    this.successorJobs = Collections.emptyList();
-                }
-                this.jobs.add(job);
-            }
-
-        }
-        else{
-            this.jobs = Collections.emptyList();
-        }
-    }
-
-
-    public void setResourceList(JsonNode rootNode) {
-        JsonNode resourceListNode = rootNode.get("ResourceList");
-        if (resourceListNode != null && resourceListNode.isArray() && !resourceListNode.isEmpty()) {
-            this.resources =  new ArrayList<>();
-            for (JsonNode resourceNode : resourceListNode) {
-                if (resourceNode.get("@type").asText().equals("local")) {
-                    LocalResource localResource = new LocalResource();
-                    localResource.setId(resourceNode.get("RID").asText());
-                    localResource.setCapacity(resourceNode.get("Capacity").asInt());
-                    localResource.setRenewable(resourceNode.get("Renewable").asBoolean());
-                    // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
-                    this.resources.add(localResource);
-
-                } else {
-                    this.resources =  new ArrayList<>();
-                    GlobalResource globalResource = new GlobalResource();
-                    globalResource.setId(resourceNode.get("RID").asText());
-                    globalResource.setCapacity(resourceNode.get("Capacity").asInt());
-                    //globalResource.setRenewable(resourceNode.get("Renewable").asBoolean());
-                    // resource.setRestrictionList(resourceObject.getJsonArray("RestrictionList").getValuesAs(Object.class));
-                    this.resources.add(globalResource);
-                }
-            }
-        }
-    }
-
-    public void setRestrictionList(JsonNode rootNode) {
-        JsonNode jobListNode = rootNode.get("JobList");
-        if (jobListNode != null && jobListNode.isArray() && !jobListNode.isEmpty()) {
-            this.RestrictionList = new ArrayList<>();
-            for (JsonNode jobNode : jobListNode) {
-                JsonNode RestrictionLosttNode = jobNode.get("RestrictionList");
-                if (RestrictionLosttNode != null && RestrictionLosttNode.isArray() && !RestrictionLosttNode.isEmpty()) {
-                    for (JsonNode restriction : RestrictionLosttNode) {
-                        this.RestrictionList.add(restriction.asText());
-                    }
-                } else {
-                    this.RestrictionList= Collections.emptyList();
-                }
-            }
-
-        }
     }
 }
 

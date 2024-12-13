@@ -1,6 +1,5 @@
 package org.acme.projectjobschedule.app;
 
-import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.Allocation;
@@ -46,10 +45,9 @@ public class ProjectJobScheduleApp {
         // Load the problem from JSON
         String filePath = "src/main/resources/data.json"; // Путь к файлу JSON
 
-        // Создание экземпляра JsonImporter
-        JsonImporter importer = new JsonImporter(filePath);
-        DataModel model = importer.loadFromFile(filePath);
-
+       JsonImporter importer = new JsonImporter();
+       importer.readOperationHashMap(filePath);
+       importer.printOperationHashMap();
 
     }
 

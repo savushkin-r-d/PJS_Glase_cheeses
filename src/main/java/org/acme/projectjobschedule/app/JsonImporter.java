@@ -1,15 +1,21 @@
 package org.acme.projectjobschedule.app;
-
-import org.acme.projectjobschedule.domain.*;
-import org.acme.projectjobschedule.domain.resource.Resource;
-import org.acme.projectjobschedule.app.DataModel;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonImporter {
     private String filepath;
+    Map<String, Object> jsonMap;
+
+    public JsonImporter(){
+
+    }
 
     public String getFilepath(){
         return filepath;
@@ -23,79 +29,101 @@ public class JsonImporter {
        this.filepath=filePath;
     }
 
-    public JsonImporter(){
 
-    }
+ public void printOperationHashMap(){
+    System.out.println(jsonMap);
+}
 
-    public DataModel loadFromFile(String filePath) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        DataModel dataModel = new DataModel();
-        try  {
+    public void readOperationHashMap(String filepath) {
+        try {
+            // Путь к JSON-файлу
+            File jsonFile = new File(filepath);
+
+            // Создаем ObjectMapper для работы с JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+
             // Читаем JSON-файл в JsonNode
-            JsonNode rootNode = objectMapper.readTree(new File(filePath));
+            JsonNode rootNode = objectMapper.readTree(jsonFile);
 
-            // Инициализация объекта DataModel
-            dataModel.setJobList(rootNode);
-            dataModel.setProjectList(rootNode);
-            dataModel.setResourceList(rootNode);
-            dataModel.setRestrictionList(rootNode);
-            dataModel.setId(rootNode.get("ID").asText());
-            dataModel.setStartDate(rootNode.get("StartDate").asText());
-            dataModel.setEndDate(rootNode.get("EndDate").asText());
-            dataModel.setTermination(rootNode.get("Termination").asText());
+            // Создаем HashMap для хранения данных
+            jsonMap = new HashMap<>();
+
+            // Обрабатываем корневые поля
+            jsonMap.put("ID", rootNode.path("ID").asText());
+            jsonMap.put("StartDate", rootNode.path("StartDate").asText());
+            jsonMap.put("EndDate", rootNode.path("EndDate").asText());
+            jsonMap.put("Termination", rootNode.path("Termination").asText());
+
+            // Обрабатываем массив ResourceList
+            List<Map<String, Object>> resourceList = new ArrayList<>();
+            for (JsonNode resourceNode : rootNode.path("ResourceList")) {
+                Map<String, Object> resourceMap = new HashMap<>();
+                resourceMap.put("RID", resourceNode.path("RID").asText());
+                resourceMap.put("Capacity", resourceNode.path("Capacity").asInt());
+                resourceMap.put("@type", resourceNode.path("@type").asText());
+                resourceMap.put("Renewable", resourceNode.path("Renewable").asBoolean());
+                resourceMap.put("RestrictionList", parseStringList(resourceNode.path("RestrictionList")));
+                resourceList.add(resourceMap);
+            }
+            jsonMap.put("ResourceList", resourceList);
+
+            // Обрабатываем массив JobList
+            List<Map<String, Object>> jobList = new ArrayList<>();
+            for (JsonNode jobNode : rootNode.path("JobList")) {
+                Map<String, Object> jobMap = new HashMap<>();
+                jobMap.put("JID", jobNode.path("JID").asText());
+                jobMap.put("SuccessorList", parseStringList(jobNode.path("SuccessorList")));
+                jobList.add(jobMap);
+            }
+            jsonMap.put("JobList", jobList);
+
+            // Обрабатываем массив ProjectList
+            List<Map<String, Object>> projectList = new ArrayList<>();
+            for (JsonNode projectNode : rootNode.path("ProjectList")) {
+                Map<String, Object> projectMap = new HashMap<>();
+                projectMap.put("PID", projectNode.path("PID").asText());
+                projectMap.put("Priority", projectNode.path("Priority").asInt());
+                projectMap.put("VB", projectNode.path("VB").asInt());
+                projectMap.put("GTIN", projectNode.path("GTIN").asText());
+                projectMap.put("NP", projectNode.path("NP").asInt());
+
+                // Обрабатываем массив ExecutionModeList
+                List<Map<String, Object>> executionModeList = new ArrayList<>();
+                for (JsonNode executionModeNode : projectNode.path("ExecutionModeList")) {
+                    Map<String, Object> executionModeMap = new HashMap<>();
+                    executionModeMap.put("JID", executionModeNode.path("JID").asText());
+                    executionModeMap.put("Duration", executionModeNode.path("Duration").asInt());
+
+                    // Обрабатываем массив ResourceRequirementList
+                    List<Map<String, Object>> resourceRequirementList = new ArrayList<>();
+                    for (JsonNode resourceRequirementNode : executionModeNode.path("ResourceRequirementList")) {
+                        Map<String, Object> resourceRequirementMap = new HashMap<>();
+                        resourceRequirementMap.put("RID", resourceRequirementNode.path("RID").asText());
+                        resourceRequirementMap.put("Requirement", resourceRequirementNode.path("Requirement").asInt());
+                        resourceRequirementList.add(resourceRequirementMap);
+                    }
+                    executionModeMap.put("ResourceRequirementList", resourceRequirementList);
+                    executionModeList.add(executionModeMap);
+                }
+                projectMap.put("ExecutionModeList", executionModeList);
+                projectList.add(projectMap);
+            }
+            jsonMap.put("ProjectList", projectList);
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
-        return dataModel;
     }
 
-    public void printDataObject(DataModel model){
-        if (model != null) {
-            System.out.println("ID: " + model.getId());
-            System.out.println("StartDate: " + model.getStartDate());
-            System.out.println("EndDate: " + model.getEndDate());
-            System.out.println("Termination: " + model.getTermination());
 
-            System.out.println("ResourceList:");
-            for (Resource resource : model.getResourceList()) {
-                System.out.println("  RID: " + resource.getId());
-                System.out.println("  Capacity: " + resource.getCapacity());
-                System.out.println("  Renewable: " + resource.isRenewable());
-                //  System.out.println("  RestrictionList: " + resource.getRestrictionList());
-            }
-
-            System.out.println("JobList:");
-            for (Job job : model.getJobList()) {
-                System.out.println("  JID: " + job.getId());
-                //System.out.println("  SuccessorList: " + job.getSuccessorList());
-                System.out.println("  ExecutionModeList:");
-                for (ExecutionMode executionMode : job.getExecutionModes()) {
-                    System.out.println("    JID: " + executionMode.getId());
-                    System.out.println("    Duration: " + executionMode.getDuration());
-
-                    System.out.println("    ResourceRequirementList:");
-                    for (ResourceRequirement resourceRequirement : executionMode.getResourceRequirements()) {
-                        System.out.println("      RID: " + resourceRequirement.getId());
-                        System.out.println("      Requirement: " + resourceRequirement.getRequirement());
-                    }
-                }
-            }
-
-            System.out.println("ProjectList:");
-            for (Project project : model.getProjectList()) {
-                System.out.println("  PID: " + project.getId());
-                System.out.println("  Priority: " + project.getPriority());
-                System.out.println("  VB: " + project.getVb());
-                System.out.println("  GTIN: " + project.getGtin());
-                System.out.println("  NP: " + project.getNp());
-
-            }
-
-        } else {
-            System.out.println("DataModel is not loaded.");
+    // Метод для преобразования JsonNode в List<String>
+    private static List<String> parseStringList(JsonNode node) {
+        List<String> list = new ArrayList<>();
+        for (JsonNode item : node) {
+            list.add(item.asText());
         }
-
+        return list;
     }
+
+
 }
