@@ -51,6 +51,42 @@ public class DataModel extends JsonImporter {
     public void printProjects() {
         readOperationHashMap();
         initProjectList();
+        initResourceRequirementList();
+        initJobList();
+        initBase();
+        System.out.println("ID:" + this.ID);
+        System.out.println("StartDate:" + this.StartDate);
+        System.out.println("EndDate:" + this.EndDate);
+        System.out.println("Termination:" + this.Termination);
+
+        System.out.println("ResourceList:");
+
+        if (this.ResourceList.isEmpty()){
+            for (Resource resource : ResourceList){
+                System.out.println("RID:" + resource.getId());
+                System.out.println("Capacity:" + resource.getCapacity());
+                System.out.println("Renewable:" + resource.isRenewable());
+                System.out.println("RestrictionList:");
+                for (String restriction : this.RestrictionList){
+                    System.out.println(restriction);
+                }
+            }
+        }
+
+        System.out.println();
+        System.out.println("JobList:");
+        if (this.jobs.isEmpty()){
+            for (Job job : this.jobs){
+                System.out.println("JID:" + job.getId());
+                System.out.println("SuccessorList:");
+                for (String successorJob : this.successorJobsList){
+                    System.out.print(successorJob + ",");
+                }
+                System.out.println();
+            }
+        }
+
+        System.out.println();
         System.out.println("ProjectList:");
         if (this.projects.isEmpty()) {
             System.out.println("ProjectList is empty");
@@ -61,14 +97,32 @@ public class DataModel extends JsonImporter {
                 System.out.println("VB:" + project.getVb());
                 System.out.println("GTIN:" + project.getGtin());
                 System.out.println("NP:" + project.getNp());
-                System.out.println();
+                if(this.executionModeList.isEmpty()){
+                    System.out.println("ExecutionModetList is empty");
+                }
+                else {
+                    System.out.println("ExecutionModeList:");
+                    for (ExecutionMode executionMode : this.executionModeList){
+                        System.out.println("JID:" + executionMode.getId() );
+                        System.out.println("ResourceRequirementList:");
+                        for (ResourceRequirement resourceRequirement : this.resourceRequirementList){
+                            System.out.print("RID:" +  resourceRequirement.getId());
+                            System.out.print("Requirement:" +  resourceRequirement.getRequirement());
+                        }
+                        System.out.println();
+                    }
+                    System.out.println();
+                }
             }
         }
+        System.out.println();
     }
+
 
     private void initProjectList() {
         List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
         this.projects = new ArrayList<>();
+        this.executionModeList = new ArrayList<>();
         for (Map<String, Object> jsonProject : jsonProjects) {
             Project project = new Project();
             String id = (String) jsonProject.get("PID");
@@ -81,19 +135,33 @@ public class DataModel extends JsonImporter {
             project.setGtin(gtin);
             int np = (int) jsonProject.get("NP");
             project.setNp(np);
+
+                List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
+                for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
+                    ExecutionMode executionMode = new ExecutionMode();
+                    String jid = (String) jsonExecutionMode.get("JID");
+                    executionMode.setId(jid);
+                    int duration = (int) jsonExecutionMode.get("Duration");
+                    executionMode.setDuration(duration);
+                    this.executionModeList.add(executionMode);
+                }
             this.projects.add(project);
-        }
+            }
         if (this.projects == null) {
             this.projects = Collections.emptyList();
         }
-    }
+        if (this.executionModeList == null) {
+            this.resourceRequirementList = Collections.emptyList();
+        }
+        }
 
-    private void initExecutionModeList() {
+
+
+   /* private void initExecutionModeList() {
         List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
+        this.executionModeList = new ArrayList<>();
         for (Map<String, Object> jsonProject : jsonProjects) {
-            List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonMap.get("ExecutionModeList");
-            this.executionModeList = new ArrayList<>();
-
+            List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
             for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
                 ExecutionMode executionMode = new ExecutionMode();
                 String jid = (String) jsonExecutionMode.get("JID");
@@ -106,16 +174,16 @@ public class DataModel extends JsonImporter {
                 this.resourceRequirementList = Collections.emptyList();
             }
         }
-    }
+    }*/
 
     private void initResourceRequirementList() {
         List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
         for (Map<String, Object> jsonProject : jsonProjects) {
-            List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonMap.get("ExecutionModeList");
+            List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
             this.executionModeList = new ArrayList<>();
 
             for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
-                List<Map<String, Object>> jsonResourceRequirementList = (List<Map<String, Object>>) jsonMap.get("ResourceRequirementList");
+                List<Map<String, Object>> jsonResourceRequirementList = (List<Map<String, Object>>) jsonExecutionMode.get("ResourceRequirementList");
                 this.resourceRequirementList = new ArrayList<>();
                 for (Map<String, Object> jsonResourceRequirement : jsonResourceRequirementList) {
                     ResourceRequirement resourceRequirement = new ResourceRequirement();
