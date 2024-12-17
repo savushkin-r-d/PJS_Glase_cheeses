@@ -39,63 +39,15 @@ public class ProjectJobScheduleApp {
                 .withTerminationSpentLimit(Duration.ofSeconds(5)));
 
         // Load the problem
-     //   DemoDataGenerator demo_data = new DemoDataGenerator();
-      //  ProjectJobSchedule problem = demo_data.generateDemoData();
+        //   DemoDataGenerator demo_data = new DemoDataGenerator();
+        //  ProjectJobSchedule problem = demo_data.generateDemoData();
 
         // Load the problem from JSON
         String filePath = "src/main/resources/data.json"; // Путь к файлу JSON
 
 
-       DataModel model = new DataModel(filePath);
-       model.readOperationHashMap();
-       model.printProjects();
-
-
+        DataModel model = new DataModel(filePath);
+        model.readOperationHashMap();
+        model.initModelObject();
     }
-
-    public static void  printProjectJobSchedule(ProjectJobSchedule schedule){
-            LOGGER.info("");
-            List<Project> projects = schedule.getProjects();
-            List<Job> jobs = schedule.getJobs();
-
-            Map<Project, List<Job>> projectJobMap = jobs.stream()
-                    .filter(job -> job.getProject() != null)
-                    .collect(Collectors.groupingBy(Job::getProject));
-
-            LOGGER.info("| Project id |                   Project                     | Job type   |");
-            LOGGER.info("|" + "------------|-----------------------------------------------|------------|");
-
-            for (Project project : projects) {
-                List<Job> projectJobs = projectJobMap.getOrDefault(project, Collections.emptyList());
-
-                if (projectJobs.isEmpty()) {
-                    LOGGER.info("| " + String.format("%-11s", project.getReleaseDate()) + " | "
-                            + "No scheduled jobs".formatted() + " |");
-                    continue;
-                }
-
-                for (Job job : projectJobs) {
-                    LOGGER.info("| " + String.format("%-10s", project.getId()) + " | "
-                            + String.format("%-11s", job.getProject()) + " | "
-                            + String.format("%-10s", job.getJobType()) + " | ");
-                }
-                LOGGER.info("|" + "------------|-----------------------------------------------|------------|");
-            }
-
-            List<Job> unassignedJobs = jobs.stream()
-                    .filter(job -> job.getProject() == null || job.getJobType() == null)
-                    .toList();
-
-            if (!unassignedJobs.isEmpty()) {
-                LOGGER.info("");
-                LOGGER.info("Unassigned jobs:");
-                for (Job job : unassignedJobs) {
-                    LOGGER.info("  " + job.getProject() + " - Job type: " + job.getJobType());
-                }
-            }
-        }
-    }
-
-
-
-
+}
