@@ -5,6 +5,7 @@ import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.Job;
 import org.acme.projectjobschedule.domain.Project;
+import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
 
@@ -48,6 +49,25 @@ public class ProjectJobScheduleApp {
 
         DataModel model = new DataModel(filePath);
         model.readOperationHashMap();
-        model.initModelObject();
+        ProjectJobSchedule problem =model.generateProjectJobSchedule();
+        System.out.println("ProjectList:");
+        for(Project project : problem.getProjects()){
+        System.out.println(project.getId());
+        System.out.println(project.getPID());
+            System.out.println(project.getPriority());
+            System.out.println(project.getVb());
+            System.out.println(project.getGtin());
+            System.out.println(project.getNp());
+            System.out.println();
+
+    }
+        System.out.println("ResourceList");
+        for(Resource resource : problem.getResources()){
+            System.out.println(resource.getId());
+            System.out.println(resource.getRID());
+            System.out.println(resource.getCapacity());
+            System.out.println(resource.isRenewable());
+            System.out.println();
+        }
     }
 }

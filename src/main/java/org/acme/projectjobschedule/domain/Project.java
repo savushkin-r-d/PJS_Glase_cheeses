@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 //@JsonIdentityInfo(scope = Project.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Project {
-    @JsonProperty("PID")
+
+    private String PID;
     private String id;
     @JsonProperty("Priority")
     private int priority;
@@ -35,6 +36,13 @@ public class Project {
         this.criticalPathDuration = criticalPathDuration;
     }
 
+    public String getPID(){
+        return  PID;
+    }
+
+    public void setPID(String PID) {
+        this.PID = PID;
+    }
     public String getId() {
         return id;
     }
@@ -112,4 +120,6 @@ public class Project {
     public int hashCode() {
         return getId().hashCode();
     }
+
+
 }
