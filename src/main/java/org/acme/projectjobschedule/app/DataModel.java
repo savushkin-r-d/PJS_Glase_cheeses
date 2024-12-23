@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.GlobalResource;
@@ -24,7 +25,7 @@ public class DataModel extends JsonImporter {
     private List<Resource> resources;
     private List<List<ExecutionMode>> executionModeList;
     private List<Job> jobs;
-    private List<String> successorJobsList;
+    private  Map<String, List<String>> successorJobMap;
     private List<List<ResourceRequirement>> resourceRequirementList;
     private List<String> RestrictionList;
     private List<Resource> ResourceList;
@@ -132,18 +133,13 @@ public class DataModel extends JsonImporter {
      return resources1;
  }
 
- private void initJob(int jobsSize, List<Project> projects, List<Resource> resources){
-     List<Map<String, Object>> jsonJobs = (List<Map<String, Object>>) jsonMap.get("JobList");
-     List<Job> jobs = new ArrayList<>(jobsSize);
-     int jobsCountPerProject = jobsSize / 2;
-     int countJob = 0;
-     for(Project project : projects){
-         List<Job> jobsPerProject = new ArrayList<>(jobsCountPerProject);
-         jobsPerProject.add(new Job(String.valueOf(countJob++), project, SOURCE));
-         for (int i = 0; i < jobsCountPerProject - 2; i++) {
-             jobsPerProject.add(new Job(String.valueOf(countJob++), project, STANDARD));
-         }
-     }
+ private void initJob(List<Project> projects1, List<Resource> resources1){
+        List<Job> jobs1 = new ArrayList<>();
+        int id = 0;
+        for(Project project : projects1){
+
+        }
+
  }
 
     private void initProjectList() {
@@ -203,23 +199,29 @@ public class DataModel extends JsonImporter {
         }
         }
 
-    private void initJobList() {
+    public void initJobList() {
         List<Map<String, Object>> jsonJobs = (List<Map<String, Object>>) jsonMap.get("JobList");
+        int id =0;
         this.jobs = new ArrayList<>();
+        this.successorJobMap = new HashMap<>();
         for (Map<String, Object> jsonJob : jsonJobs) {
             Job job = new Job();
-            String id = (String) jsonJob.get("JID");
-            job.setId(id);
+            job.setId(String.valueOf(id++));
+            String jid = (String) jsonJob.get("JID");
+            job.setJID(jid);
             List<String> successorList = (List<String>) jsonJob.get("SuccessorList");
-            if (successorList == null) {
-                this.successorJobsList = successorList;
-            } else {
-                this.successorJobsList = Collections.emptyList();
-            }
+            this.successorJobMap.put(job.getId(), successorList);
             this.jobs.add(job);
         }
-        if (this.jobs == null) {
-            this.jobs = Collections.emptyList();
+
+        for (Job job : this.jobs){
+            System.out.println("id:" + job.getId());
+            System.out.println("JID:" + job.getJID());
+            System.out.print("SuccessorList:");
+            for (String successJob : this.successorJobMap.get(job.getId())){
+                System.out.print(successJob+  " ");
+            }
+            System.out.println();
         }
     }
 

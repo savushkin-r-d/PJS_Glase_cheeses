@@ -69,5 +69,6 @@ public class ProjectJobScheduleApp {
             System.out.println(resource.isRenewable());
             System.out.println();
         }
+        model.initJobList();
     }
 }

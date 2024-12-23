@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 //@JsonIdentityInfo(scope = Job.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Job {
-    @JsonProperty("JID")
+    private String JID;
     private String id;
     private Project project;
     private JobType jobType;
@@ -34,6 +34,10 @@ public class Job {
         this.project = project;
         this.jobType = jobType;
     }
+
+    public String getJID(){ return JID; }
+
+    public void setJID(String JID){ this.JID = JID; }
 
     public String getId() {
         return id;
