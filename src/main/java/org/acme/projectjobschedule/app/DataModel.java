@@ -23,9 +23,9 @@ public class DataModel extends JsonImporter {
 
     private List<Project> projects;
     private List<Resource> resources;
-    private List<List<ExecutionMode>> executionModeList;
+    private HashMap <String,ExecutionMode> executionModeMap;
     private List<Job> jobs;
-    private  Map<String, List<String>> successorJobMap;
+    private Map<String, List<String>> successorJobMap;
     private List<List<ResourceRequirement>> resourceRequirementList;
     private List<String> RestrictionList;
     private List<Resource> ResourceList;
@@ -44,10 +44,6 @@ public class DataModel extends JsonImporter {
 
     public List<Resource> getResourceList() {
         return resources;
-    }
-
-    public List<List<ExecutionMode>> getExecutionModeList() {
-        return executionModeList;
     }
 
     public void initModelObject(){
@@ -70,11 +66,13 @@ public class DataModel extends JsonImporter {
 
  private   List<Project> initProject() {
      List<Project> projects1 = new ArrayList<>();
-     int id = 0;
+     this.executionModeMap = new HashMap<>();
+     int project_id = 0;
+     int executionMode_id =0;
      List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
      for (Map<String, Object> jsonProject : jsonProjects) {
          Project project = new Project();
-         project.setId(String.valueOf(id++));
+         project.setId(String.valueOf(project_id++));
          String PID = (String) jsonProject.get("PID");
          project.setPID(PID);
          int priority = (int) jsonProject.get("Priority");
@@ -85,6 +83,16 @@ public class DataModel extends JsonImporter {
          project.setGtin(gtin);
          int np = (int) jsonProject.get("NP");
          project.setNp(np);
+         List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
+         for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
+             ExecutionMode executionMode = new ExecutionMode();
+             executionMode.setId(String.valueOf(executionMode_id++));
+             String jid = (String) jsonExecutionMode.get("JID");
+             executionMode.setId(jid);
+             int duration = (int) jsonExecutionMode.get("Duration");
+             executionMode.setDuration(duration);
+             executionModeMap.put(executionMode.getId(),executionMode);
+         }
          projects1.add(project);
      }
      return projects1;
