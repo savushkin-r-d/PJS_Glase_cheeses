@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ResourceRequirement {
-    @JsonProperty("RID")
+    private String RID;
     private String id;
     private ExecutionMode executionMode;
     private Resource resource;
@@ -27,6 +27,10 @@ public class ResourceRequirement {
         this.resource = resource;
         this.requirement = requirement;
     }
+
+    public  String getRID(){ return RID; }
+
+    public void setRID(String RID){ this.RID = RID; }
 
     public String getId() {
         return id;

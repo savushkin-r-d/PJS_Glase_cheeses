@@ -29,18 +29,12 @@ public class DataModel extends JsonImporter {
     private List<List<ResourceRequirement>> resourceRequirementList;
     private List<String> RestrictionList;
     private List<Resource> ResourceList;
+   private Map<String,ResourceRequirement> resourceRequirementMap;
 
     public DataModel(String filepath) {
         super(filepath);
     }
 
-    public List<Project> getProjectList() {
-        return projects;
-    }
-
-    public List<Job> getJobList() {
-        return jobs;
-    }
 
     public List<Resource> getResourceList() {
         return resources;
@@ -48,7 +42,7 @@ public class DataModel extends JsonImporter {
 
     public void initModelObject(){
         initBase();
-        initProjectList();
+        initProject();
         initJobList();
     }
 
@@ -58,8 +52,10 @@ public class DataModel extends JsonImporter {
         // Projects
         List<Project> projects = initProject();
         List<Resource> resources1 = initResource();
+        List<Job> jobs1  = initJobList();
         projectJobSchedule.setProjects(projects);
         projectJobSchedule.setResources(resources1);
+        projectJobSchedule.setJobs(jobs1);
         return projectJobSchedule;
 
     }
@@ -67,8 +63,11 @@ public class DataModel extends JsonImporter {
  private   List<Project> initProject() {
      List<Project> projects1 = new ArrayList<>();
      this.executionModeMap = new HashMap<>();
+     this.resourceRequirementMap = new HashMap<>();
      int project_id = 0;
-     int executionMode_id =0;
+     int executionMode_id = 0;
+     int resourceRequirement_id = 0;
+
      List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
      for (Map<String, Object> jsonProject : jsonProjects) {
          Project project = new Project();
@@ -83,6 +82,7 @@ public class DataModel extends JsonImporter {
          project.setGtin(gtin);
          int np = (int) jsonProject.get("NP");
          project.setNp(np);
+
          List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
          for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
              ExecutionMode executionMode = new ExecutionMode();
@@ -91,9 +91,20 @@ public class DataModel extends JsonImporter {
              executionMode.setId(jid);
              int duration = (int) jsonExecutionMode.get("Duration");
              executionMode.setDuration(duration);
-             executionModeMap.put(executionMode.getId(),executionMode);
+
+             List<Map<String, Object>> jsonResourceRequirementList = (List<Map<String, Object>>) jsonExecutionMode.get("ResourceRequirementList");
+             for (Map<String, Object> jsonResourceRequirement : jsonResourceRequirementList) {
+                 ResourceRequirement resourceRequirement = new ResourceRequirement();
+                 resourceRequirement.setId(String.valueOf(resourceRequirement_id++));
+                 resourceRequirement.setRID((String) jsonResourceRequirement.get("RID"));
+                 resourceRequirement.setRequirement((int) jsonResourceRequirement.get("Requirement"));
+                 resourceRequirement.setExecutionMode(executionMode);
+                 resourceRequirementMap.put(resourceRequirement.getId(), resourceRequirement);
+             }
+
+             executionModeMap.put(executionMode.getId(), executionMode);
          }
-         projects1.add(project);
+
      }
      return projects1;
  }
@@ -112,6 +123,7 @@ public class DataModel extends JsonImporter {
              globalResource.setRID(rid);
              int capacity = (int) jsonResource.get("Capacity");
              globalResource.setCapacity(capacity);
+
              List<String> restrictionList = (List<String>) jsonResource.get("RestrictionList");
              if (RestrictionList == null) {
                  this.RestrictionList = restrictionList;
@@ -119,6 +131,7 @@ public class DataModel extends JsonImporter {
                  this.RestrictionList = Collections.emptyList();
              }
              resources1.add(globalResource);
+
          } else if (jsonResource.get("@type").equals("local")) {
              LocalResource localResource = new LocalResource();
              localResource.setId(String.valueOf(id++));
@@ -141,96 +154,28 @@ public class DataModel extends JsonImporter {
      return resources1;
  }
 
- private void initJob(List<Project> projects1, List<Resource> resources1){
-        List<Job> jobs1 = new ArrayList<>();
-        int id = 0;
-        for(Project project : projects1){
-
-        }
-
- }
-
-    private void initProjectList() {
-        List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
-        this.projects = new ArrayList<>();
-        this.executionModeList = new ArrayList<>();
-        this.resourceRequirementList = new ArrayList<>();
-        List<ExecutionMode> exmList = new ArrayList<>();
-        List<ResourceRequirement> resReqList = new ArrayList<>();
-        for (Map<String, Object> jsonProject : jsonProjects) {
-            Project project = new Project();
-            String id = (String) jsonProject.get("PID");
-            project.setId(id);
-            int priority = (int) jsonProject.get("Priority");
-            project.setPriority(priority);
-            int vb = (int) jsonProject.get("VB");
-            project.setVb(vb);
-            String gtin = (String) jsonProject.get("GTIN");
-            project.setGtin(gtin);
-            int np = (int) jsonProject.get("NP");
-            project.setNp(np);
-
-                List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
-                for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
-
-                    ExecutionMode executionMode = new ExecutionMode();
-                    String jid = (String) jsonExecutionMode.get("JID");
-                    executionMode.setId(jid);
-                    int duration = (int) jsonExecutionMode.get("Duration");
-                    executionMode.setDuration(duration);
-
-                    List<Map<String, Object>> jsonResourceRequirementList = (List<Map<String, Object>>) jsonExecutionMode.get("ResourceRequirementList");
-
-                    for (Map<String, Object> jsonResourceRequirement : jsonResourceRequirementList) {
-
-                        ResourceRequirement resourceRequirement = new ResourceRequirement();
-                        String rid = (String) jsonResourceRequirement.get("RID");
-                        resourceRequirement.setId(rid);
-                        int requirement = (int) jsonResourceRequirement.get("Requirement");
-                        resourceRequirement.setRequirement(requirement);
-                        resReqList.add(resourceRequirement);
-                    }
-                    exmList.add(executionMode);
-                }
-            this.projects.add(project);
-            this.resourceRequirementList.add(resReqList);
-            this.executionModeList.add(exmList);
-            }
-        if (this.projects == null) {
-            this.projects = Collections.emptyList();
-        }
-        if (this.executionModeList == null) {
-            this.resourceRequirementList = Collections.emptyList();
-        }
-        if (this.resourceRequirementList == null) {
-            this.resourceRequirementList = Collections.emptyList();
-        }
-        }
-
-    public void initJobList() {
+    private List<Job> initJobList() {
         List<Map<String, Object>> jsonJobs = (List<Map<String, Object>>) jsonMap.get("JobList");
         int id =0;
-        this.jobs = new ArrayList<>();
+        List<Job> jobs = new ArrayList<>();
         this.successorJobMap = new HashMap<>();
         for (Map<String, Object> jsonJob : jsonJobs) {
             Job job = new Job();
             job.setId(String.valueOf(id++));
             String jid = (String) jsonJob.get("JID");
             job.setJID(jid);
+            if(job.getJID().equals("SOURCE") || job.getJID().equals("SINK")){
+                job.setJobType(JobType.valueOf(job.getJID()));
+            }
+          else {
+              job.setJobType(STANDARD);
+            }
             List<String> successorList = (List<String>) jsonJob.get("SuccessorList");
             this.successorJobMap.put(job.getId(), successorList);
-            this.jobs.add(job);
+            jobs.add(job);
         }
 
-        for (Job job : this.jobs){
-            System.out.println("id:" + job.getId());
-            System.out.println("JID:" + job.getJID());
-            System.out.print("SuccessorList:");
-            for (String successJob : this.successorJobMap.get(job.getId())){
-                System.out.print(successJob+  " ");
-            }
-            System.out.println();
-        }
+        return jobs;
     }
 
     private void initBase() {

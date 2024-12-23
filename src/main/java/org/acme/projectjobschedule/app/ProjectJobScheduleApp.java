@@ -2,11 +2,8 @@ package org.acme.projectjobschedule.app;
 
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;
-import org.acme.projectjobschedule.domain.Allocation;
-import org.acme.projectjobschedule.domain.Job;
-import org.acme.projectjobschedule.domain.Project;
+import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.Resource;
-import org.acme.projectjobschedule.domain.ProjectJobSchedule;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
 
 import org.slf4j.Logger;
@@ -69,6 +66,16 @@ public class ProjectJobScheduleApp {
             System.out.println(resource.isRenewable());
             System.out.println();
         }
-        model.initJobList();
+        System.out.println();
+
+        for (Job job : problem.getJobs()){
+            System.out.println(job.getId());
+            System.out.println(job.getJID());
+            System.out.println(job.getJobType());
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("ExecutionModeList:");
+
     }
 }
