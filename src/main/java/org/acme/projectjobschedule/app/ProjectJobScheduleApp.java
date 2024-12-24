@@ -5,13 +5,14 @@ import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
-
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,6 +77,8 @@ public class ProjectJobScheduleApp {
         }
         System.out.println();
         System.out.println("ExecutionModeList:");
+        HashMap<String, List<ExecutionMode>> exMap = model.getExecutionModeMap();
+        System.out.println(exMap);
 
     }
 }

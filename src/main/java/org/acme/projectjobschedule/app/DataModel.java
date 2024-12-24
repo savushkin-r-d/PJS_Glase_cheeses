@@ -23,7 +23,7 @@ public class DataModel extends JsonImporter {
 
     private List<Project> projects;
     private List<Resource> resources;
-    private HashMap <String,ExecutionMode> executionModeMap;
+    private HashMap <String,List<ExecutionMode>> executionModeMap;
     private List<Job> jobs;
     private Map<String, List<String>> successorJobMap;
     private List<List<ResourceRequirement>> resourceRequirementList;
@@ -40,6 +40,9 @@ public class DataModel extends JsonImporter {
         return resources;
     }
 
+    public  HashMap<String, List<ExecutionMode>> getExecutionModeMap(){
+        return executionModeMap;
+    }
     public void initModelObject(){
         initBase();
         initProject();
@@ -64,6 +67,7 @@ public class DataModel extends JsonImporter {
      List<Project> projects1 = new ArrayList<>();
      this.executionModeMap = new HashMap<>();
      this.resourceRequirementMap = new HashMap<>();
+     int exMList_id =0;
      int project_id = 0;
      int executionMode_id = 0;
      int resourceRequirement_id = 0;
@@ -77,6 +81,7 @@ public class DataModel extends JsonImporter {
          int priority = (int) jsonProject.get("Priority");
          project.setPriority(priority);
          int vb = (int) jsonProject.get("VB");
+
          project.setVb(vb);
          String gtin = (String) jsonProject.get("GTIN");
          project.setGtin(gtin);
@@ -84,6 +89,7 @@ public class DataModel extends JsonImporter {
          project.setNp(np);
 
          List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
+         List<ExecutionMode> exMList = new ArrayList<>();
          for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
              ExecutionMode executionMode = new ExecutionMode();
              executionMode.setId(String.valueOf(executionMode_id++));
@@ -101,10 +107,9 @@ public class DataModel extends JsonImporter {
                  resourceRequirement.setExecutionMode(executionMode);
                  resourceRequirementMap.put(resourceRequirement.getId(), resourceRequirement);
              }
-
-             executionModeMap.put(executionMode.getId(), executionMode);
+             exMList.add(executionMode);
          }
-
+         executionModeMap.put(String.valueOf(project_id), exMList);
      }
      return projects1;
  }
