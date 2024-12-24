@@ -4,17 +4,22 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-@JsonIdentityInfo(scope = Job.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(scope = Job.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Job {
-
+    private String JID;
     private String id;
     private Project project;
     private JobType jobType;
+    @JsonProperty("Duration")
+    private int duration;
+    @JsonProperty("ExecutionModeList")
     private List<ExecutionMode> executionModes;
     @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("SuccessorList")
     private List<Job> successorJobs;
 
     public Job() {
@@ -29,6 +34,10 @@ public class Job {
         this.project = project;
         this.jobType = jobType;
     }
+
+    public String getJID(){ return JID; }
+
+    public void setJID(String JID){ this.JID = JID; }
 
     public String getId() {
         return id;
