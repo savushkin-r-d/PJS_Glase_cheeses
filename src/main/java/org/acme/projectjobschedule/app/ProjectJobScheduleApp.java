@@ -75,10 +75,7 @@ public class ProjectJobScheduleApp {
             System.out.println(job.getJobType());
             System.out.println();
         }
-        System.out.println();
-        System.out.println("ExecutionModeList:");
-        HashMap<String, List<ExecutionMode>> exMap = model.getExecutionModeMap();
-        System.out.println(exMap);
+
 
     }
 }

@@ -17,6 +17,7 @@ public class ExecutionMode {
     private Job job;
     private int duration; // In days
     private List<ResourceRequirement> resourceRequirements;
+    private  String JID;
 
     public ExecutionMode() {
     }
@@ -35,6 +36,10 @@ public class ExecutionMode {
         this(id, job, duration);
         this.resourceRequirements = resourceRequirements;
     }
+
+    public  String getJID(){ return JID; }
+
+    public void setJID(String JID){ this.JID = JID; }
 
     public String getId() {
         return id;
