@@ -10,6 +10,8 @@ import org.acme.projectjobschedule.domain.resource.GlobalResource;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.domain.ExecutionMode;
+import org.acme.projectjobschedule.domain.Allocation;
+
 
 import static org.acme.projectjobschedule.domain.JobType.*;
 
@@ -23,9 +25,8 @@ public class DataModel extends JsonImporter {
     private List<Resource> resources;
     private List <ExecutionMode> executionModes_fromJson;
     private Map<String, List<String>> successorJobMap;
-    private List<List<ResourceRequirement>> resourceRequirementList;
+    private List<ResourceRequirement> resourceRequirementList;
     private List<String> RestrictionList;
-    private List<Resource> ResourceList;
 
 
     public DataModel(String filepath) {
@@ -34,6 +35,59 @@ public class DataModel extends JsonImporter {
 
     public List<Resource> getResourceList() {
         return resources;
+    }
+
+    public List<ExecutionMode> getExecutionModes_fromJson() {
+        return executionModes_fromJson;
+    }
+
+    public void setExecutionModes_fromJson(List<ExecutionMode> executionModes_fromJson){
+        this.executionModes_fromJson= executionModes_fromJson;
+    }
+
+    private List<Allocation> generateAllocations(List<Job> jobs) {
+        List<Allocation> allocations = new ArrayList<>(jobs.size());
+        int doneDate = 0;
+        for (int i = 0; i < jobs.size(); i++) {
+            allocations.add(new Allocation(String.valueOf(i), jobs.get(i)));
+        }
+        // Set source, sink, predecessor and successor jobs
+        for (int i = 0; i < jobs.size(); i++) {
+            Allocation allocation = allocations.get(i);
+            Allocation sourceAllocation = allocations.stream()
+                    .filter(a -> a.getJob().getJobType() == SOURCE
+                            && a.getJob().getProject().equals(allocation.getJob().getProject()))
+                    .findFirst()
+                    .get();
+            Allocation sinkAllocation = allocations.stream()
+                    .filter(a -> a.getJob().getJobType() == SINK
+                            && a.getJob().getProject().equals(allocation.getJob().getProject()))
+                    .findFirst()
+                    .get();
+            List<Allocation> predecessorAllocations = allocations.stream()
+                    .filter(a -> !a.equals(allocation) && a.getJob().getSuccessorJobs().contains(allocation.getJob()))
+                    .distinct()
+                    .toList();
+            List<Allocation> successorAllocations = allocation.getJob().getSuccessorJobs().stream()
+                    .map(j -> allocations.stream().filter(a -> a.getJob().equals(j)).findFirst().get())
+                    .toList();
+            allocation.setSourceAllocation(sourceAllocation);
+            allocation.setSinkAllocation(sinkAllocation);
+            allocation.setPredecessorAllocations(predecessorAllocations);
+            allocation.setSuccessorAllocations(successorAllocations);
+            allocation.setPredecessorsDoneDate(doneDate);
+            boolean isSource = allocation.getJob().getJobType() == SOURCE;
+            boolean isSink = allocation.getJob().getJobType() == SINK;
+            if (isSource || isSink) {
+                allocation.setExecutionMode(allocation.getJob().getExecutionModes().get(0));
+                allocation.setDelay(0);
+                if (isSink) {
+                    doneDate += 4;
+                }
+            }
+        }
+
+        return allocations;
     }
 
     public ProjectJobSchedule generateProjectJobSchedule(){
@@ -45,11 +99,19 @@ public class DataModel extends JsonImporter {
         List<Job> jobs1  = initJobList();
         List<Job> jobs = generateJobs(jobs1, projects, resources1);
         generateExecutionMode(jobs, projects.size());
+        List<ExecutionMode> executionModeList = getExecutionModes_fromJson();
+        List<ResourceRequirement> resourceRequirementList1 = getResourceRequirements();
         projectJobSchedule.setProjects(projects);
         projectJobSchedule.setResources(resources1);
         projectJobSchedule.setJobs(jobs);
+        projectJobSchedule.setExecutionModes(executionModeList);
+        projectJobSchedule.setResourceRequirements(resourceRequirementList1);
         return projectJobSchedule;
 
+    }
+
+    private List<ResourceRequirement> getResourceRequirements(){
+        return resourceRequirementList;
     }
 
     private List<Job> generateJobs(List<Job> jobsFromJson, List<Project> projects, List<Resource> resources){
@@ -64,7 +126,6 @@ public class DataModel extends JsonImporter {
                 jobsPerProject.add(new Job(String.valueOf(countJob++), project, json_job.getJobType()));
             }
             // Add all jobs of the given project
-
             jobs.addAll(jobsPerProject);
         }
         return jobs;
@@ -81,7 +142,7 @@ public class DataModel extends JsonImporter {
 
                 for (ExecutionMode executionMode : executionModes_fromJson) {
 
-                    if (executionMode.getJID().equals("SINK") ) {
+                    if (executionMode.getJID().equals("SINK") && executionMode.getId().equals(id)) {
                             executionModeSink.add(executionMode);
                     }
                     else if(executionMode.getJID().equals("SOURCE") && executionMode.getId().equals(id)){
@@ -92,13 +153,13 @@ public class DataModel extends JsonImporter {
                     }
                 }
                 for(Job job: jobs){
-                    if(job.getJobType().equals(SINK) && job.getProject().getId().equals(i)){
+                    if(job.getJobType().equals(SINK) && job.getProject().getId().equals(id)){
                         job.setExecutionModes(executionModeSink);
                     }
-                    else if(job.getJobType().equals(SOURCE) && job.getProject().getId().equals(i)){
-                        job.setExecutionModes(executionModeSink);
+                    else if(job.getJobType().equals(SOURCE) && job.getProject().getId().equals(id)){
+                        job.setExecutionModes(executionModeSource);
                     }
-                    else if( job.getProject().getId().equals(i)){
+                    else if( job.getProject().getId().equals(id)){
                         job.setJobType(STANDARD);
                         job.setExecutionModes(executionModeStandard);
                     }
@@ -109,13 +170,13 @@ public class DataModel extends JsonImporter {
  private  List<Project> initProject() {
      List<Project> projects1 = new ArrayList<>();
      this.executionModes_fromJson = new ArrayList<>();
-     int exMList_id =0;
+     this.resourceRequirementList = new ArrayList<>();
      int project_id = 0;
 
      List<Map<String, Object>> jsonProjects = (List<Map<String, Object>>) jsonMap.get("ProjectList");
      for (Map<String, Object> jsonProject : jsonProjects) {
          Project project = new Project();
-         project.setId(String.valueOf(project_id++));
+         project.setId(String.valueOf(project_id));
          String PID = (String) jsonProject.get("PID");
          project.setPID(PID);
          int priority = (int) jsonProject.get("Priority");
@@ -137,18 +198,20 @@ public class DataModel extends JsonImporter {
              executionMode.setJID((String) jsonExecutionMode.get("JID"));
              executionMode.setId(String.valueOf(project_id));
              executionMode.setDuration((int) jsonExecutionMode.get("Duration"));
-             List<ResourceRequirement>resourceRequirementsList = new ArrayList<>();
+             List<ResourceRequirement>resourceRequirementsList1 = new ArrayList<>();
              List<Map<String, Object>> jsonResourceRequirementList = (List<Map<String, Object>>) jsonExecutionMode.get("ResourceRequirementList");
              for (Map<String, Object> jsonResourceRequirement : jsonResourceRequirementList) {
                  ResourceRequirement resourceRequirement = new ResourceRequirement();
                  resourceRequirement.setId(String.valueOf(project_id));
                  resourceRequirement.setRID((String) jsonResourceRequirement.get("RID"));
                  resourceRequirement.setRequirement((int) jsonResourceRequirement.get("Requirement"));
-                resourceRequirementsList.add(resourceRequirement);
+                resourceRequirementsList1.add(resourceRequirement);
+                resourceRequirementList.add(resourceRequirement);
              }
-             executionMode.setResourceRequirements(resourceRequirementsList);
+             executionMode.setResourceRequirements(resourceRequirementsList1);
              this.executionModes_fromJson.add(executionMode);
          }
+         ++project_id;
      }
      return projects1;
  }
@@ -162,11 +225,9 @@ public class DataModel extends JsonImporter {
          if (jsonResource.get("@type").equals("global")) {
 
              GlobalResource globalResource = new GlobalResource();
-             globalResource.setId(String.valueOf(id++));
-             String rid = (String) jsonResource.get("RID");
-             globalResource.setRID(rid);
-             int capacity = (int) jsonResource.get("Capacity");
-             globalResource.setCapacity(capacity);
+             globalResource.setId(String.valueOf(id));
+             globalResource.setRID((String) jsonResource.get("RID"));
+             globalResource.setCapacity((int) jsonResource.get("Capacity"));
 
              List<String> restrictionList = (List<String>) jsonResource.get("RestrictionList");
              if (RestrictionList == null) {
@@ -178,13 +239,10 @@ public class DataModel extends JsonImporter {
 
          } else if (jsonResource.get("@type").equals("local")) {
              LocalResource localResource = new LocalResource();
-             localResource.setId(String.valueOf(id++));
-             String rid = (String) jsonResource.get("RID");
-             localResource.setRID(rid);
-             int capacity = (int) jsonResource.get("Capacity");
-             localResource.setCapacity(capacity);
-             boolean renewable = (boolean) jsonResource.get("Renewable");
-             localResource.setRenewable(renewable);
+             localResource.setId(String.valueOf(id));
+             localResource.setRID((String) jsonResource.get("RID"));
+             localResource.setCapacity((int) jsonResource.get("Capacity"));
+             localResource.setRenewable((boolean) jsonResource.get("Renewable"));
              List<String> restrictionList = (List<String>) jsonResource.get("RestrictionList");
              if (RestrictionList == null) {
                  this.RestrictionList = restrictionList;
@@ -193,7 +251,7 @@ public class DataModel extends JsonImporter {
              }
              resources1.add(localResource);
          }
-
+         ++id;
      }
      return resources1;
  }
@@ -227,40 +285,7 @@ public class DataModel extends JsonImporter {
         this.StartDate = (String) jsonMap.get("StartDate");
         this.EndDate = (String) jsonMap.get("EndDate");
         this.Termination = (String) jsonMap.get("Termination");
-        this.ResourceList = new ArrayList<>();
-        List<Map<String, Object>> jsonResourceList = (List<Map<String, Object>>) jsonMap.get("ResourceList");
-        for (Map<String, Object> jsonResource : jsonResourceList) {
 
-            if (jsonResource.get("@type").equals("global")) {
-
-
-                GlobalResource globalResource = new GlobalResource();
-                String rid = (String) jsonResource.get("RID");
-                globalResource.setId(rid);
-                int capacity = (int) jsonResource.get("Capacity");
-                List<String> restrictionList = (List<String>) jsonResource.get("RestrictionList");
-                if (RestrictionList == null) {
-                    this.RestrictionList = restrictionList;
-                } else {
-                    this.RestrictionList = Collections.emptyList();
-                }
-            } else if (jsonResource.get("@type").equals("local")) {
-                LocalResource localResource = new LocalResource();
-                String rid = (String) jsonResource.get("RID");
-                localResource.setId(rid);
-                int capacity = (int) jsonResource.get("Capacity");
-                boolean renewable = (boolean) jsonResource.get("Renewable");
-                List<String> restrictionList = (List<String>) jsonResource.get("RestrictionList");
-                if (RestrictionList == null) {
-                    this.RestrictionList = restrictionList;
-                } else {
-                    this.RestrictionList = Collections.emptyList();
-                }
-            }
-        }
-        if(this.ResourceList==null){
-            this.ResourceList= Collections.emptyList();
-        }
     }
 }
 
