@@ -45,7 +45,7 @@ public class DataModel extends JsonImporter {
         this.executionModes_fromJson= executionModes_fromJson;
     }
 
-    private List<Allocation> generateAllocations(List<Job> jobs) {
+    /*private List<Allocation> generateAllocations(List<Job> jobs) {
         List<Allocation> allocations = new ArrayList<>(jobs.size());
         int doneDate = 0;
         for (int i = 0; i < jobs.size(); i++) {
@@ -88,7 +88,7 @@ public class DataModel extends JsonImporter {
         }
 
         return allocations;
-    }
+    }*/
 
     public ProjectJobSchedule generateProjectJobSchedule(){
         ProjectJobSchedule projectJobSchedule = new ProjectJobSchedule();
@@ -273,7 +273,8 @@ public class DataModel extends JsonImporter {
               job.setJobType(STANDARD);
             }
             List<String> successorList = (List<String>) jsonJob.get("SuccessorList");
-            this.successorJobMap.put(job.getId(), successorList);
+            Pair<String, List<String>> successorPair = new Pair<>(job.getJID(), successorList);
+            this.successorJobMap.put(job.getJID(), successorList);
             jobs.add(job);
         }
 
@@ -287,6 +288,7 @@ public class DataModel extends JsonImporter {
         this.Termination = (String) jsonMap.get("Termination");
 
     }
+    public record Pair<K, V>(K key, V value) {}
 }
 
 
