@@ -35,6 +35,13 @@ public class Job {
         this.jobType = jobType;
     }
 
+    public Job(String id, Project project, JobType jobType, String jid) {
+        this(id);
+        this.project = project;
+        this.jobType = jobType;
+        this.JID = jid;
+    }
+
     public String getJID(){ return JID; }
 
     public void setJID(String JID){ this.JID = JID; }

@@ -1,5 +1,5 @@
 package org.acme.projectjobschedule.app;
-
+import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.*;
@@ -8,7 +8,7 @@ import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.Duration;
-
+import java.util.List;
 
 public class ProjectJobScheduleApp {
 
@@ -41,6 +41,10 @@ public class ProjectJobScheduleApp {
         DataModel model = new DataModel(filePath);
         model.readOperationHashMap();
         ProjectJobSchedule problem =model.generateProjectJobSchedule();
+        // Solve the problem
+        Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
+        ProjectJobSchedule solution = solver.solve(problem);
+
         System.out.println("ProjectList:");
         for(Project project : problem.getProjects()){
         System.out.println(project.getId());
@@ -64,9 +68,13 @@ public class ProjectJobScheduleApp {
 
         for (Job job : problem.getJobs()){
             System.out.println(job.getId());
-            System.out.println(job.getJID());
+            System.out.println("Job JID:" + job.getJID());
             System.out.println(job.getJobType());
-            System.out.println();
+            System.out.println("SuccessorJobs:");
+            List<Job> successorJobs = job.getSuccessorJobs();
+            for(Job successJob : successorJobs){
+                System.out.println("JID:" + successJob.getJID());
+            }
         }
 
 

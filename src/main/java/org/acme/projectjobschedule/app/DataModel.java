@@ -45,7 +45,29 @@ public class DataModel extends JsonImporter {
         this.executionModes_fromJson= executionModes_fromJson;
     }
 
-    /*private List<Allocation> generateAllocations(List<Job> jobs) {
+    public ProjectJobSchedule generateProjectJobSchedule(){
+        ProjectJobSchedule projectJobSchedule = new ProjectJobSchedule();
+
+        // Projects
+        List<Project> projects = initProject();
+        List<Resource> resources1 = initResource();
+        List<Job> jobs1  = initJobList();
+        List<Job> jobs = generateJobs(jobs1, projects, resources1);
+        generateExecutionMode(jobs, projects.size());
+        List<ExecutionMode> executionModeList = getExecutionModes_fromJson();
+        List<ResourceRequirement> resourceRequirementList1 = getResourceRequirements();
+        List<Allocation> allocations = generateAllocations(jobs);
+        projectJobSchedule.setProjects(projects);
+        projectJobSchedule.setResources(resources1);
+        projectJobSchedule.setJobs(jobs);
+        projectJobSchedule.setExecutionModes(executionModeList);
+        projectJobSchedule.setResourceRequirements(resourceRequirementList1);
+        projectJobSchedule.setAllocations(allocations);
+        return projectJobSchedule;
+
+    }
+
+    private List<Allocation> generateAllocations(List<Job> jobs) {
         List<Allocation> allocations = new ArrayList<>(jobs.size());
         int doneDate = 0;
         for (int i = 0; i < jobs.size(); i++) {
@@ -88,48 +110,62 @@ public class DataModel extends JsonImporter {
         }
 
         return allocations;
-    }*/
-
-    public ProjectJobSchedule generateProjectJobSchedule(){
-        ProjectJobSchedule projectJobSchedule = new ProjectJobSchedule();
-
-        // Projects
-        List<Project> projects = initProject();
-        List<Resource> resources1 = initResource();
-        List<Job> jobs1  = initJobList();
-        List<Job> jobs = generateJobs(jobs1, projects, resources1);
-        generateExecutionMode(jobs, projects.size());
-        List<ExecutionMode> executionModeList = getExecutionModes_fromJson();
-        List<ResourceRequirement> resourceRequirementList1 = getResourceRequirements();
-        projectJobSchedule.setProjects(projects);
-        projectJobSchedule.setResources(resources1);
-        projectJobSchedule.setJobs(jobs);
-        projectJobSchedule.setExecutionModes(executionModeList);
-        projectJobSchedule.setResourceRequirements(resourceRequirementList1);
-        return projectJobSchedule;
-
     }
 
     private List<ResourceRequirement> getResourceRequirements(){
         return resourceRequirementList;
     }
 
-    private List<Job> generateJobs(List<Job> jobsFromJson, List<Project> projects, List<Resource> resources){
+    private List<Job> generateJobs(List<Job> jobsFromJson, List<Project> projects, List<Resource> resources) {
         int jobsSize = jobsFromJson.size();
-        List<Job> jobs = new ArrayList<>(jobsSize*projects.size());
+        List<Job> jobs = new ArrayList<>(jobsSize * projects.size());
         int jobsCountPerProject = jobsSize;
         int countJob = 0;
         for (Project project : projects) {
             // Generate the job list
             List<Job> jobsPerProject = new ArrayList<>(jobsCountPerProject);
-            for(Job json_job : jobsFromJson){
-                jobsPerProject.add(new Job(String.valueOf(countJob++), project, json_job.getJobType()));
+            for (Job json_job : jobsFromJson) {
+                jobsPerProject.add(new Job(String.valueOf(countJob++), project, json_job.getJobType(), json_job.getJID()));
             }
             // Add all jobs of the given project
             jobs.addAll(jobsPerProject);
         }
-        return jobs;
-    }
+        for(Map.Entry<String, List<String>> entry : successorJobMap.entrySet()){
+            String key = entry.getKey();
+            System.out.println("key:" +key);
+            List<String> strList = entry.getValue();
+            for(Job job : jobs){
+                List<Job> successorJobs = new ArrayList<>();
+                if(job.getJID().equals(key)){
+                    if(strList.isEmpty()){
+                        System.out.println("MATCHED:");
+                        System.out.println("EmptyList");
+                        System.out.println();
+                        successorJobs = Collections.emptyList();
+                    }
+                    else{
+                    for(String str : strList){
+                        System.out.println("str:"+ str);
+                        for(Job job1 : jobs){
+                            if(job1.equals(job)) continue;
+                            if(job1.getJID().equals(str)) {
+                                successorJobs.add(job1);
+                                System.out.println("MATCHED:");
+                                System.out.println("key:" + key);
+                                System.out.println("str:" + str);
+                                System.out.println("job1.JID:" + job1.getJID());
+                                System.out.println();
+                            };
+                        }
+                    }
+
+                }
+            }
+                job.setSuccessorJobs(successorJobs);
+        }
+        }
+            return jobs;
+        }
 
     private void generateExecutionMode(List<Job> jobs, int projectsSize){
         List<ExecutionMode> executionModeList = new ArrayList<>();
@@ -260,7 +296,7 @@ public class DataModel extends JsonImporter {
         List<Map<String, Object>> jsonJobs = (List<Map<String, Object>>) jsonMap.get("JobList");
         int id =0;
         List<Job> jobs = new ArrayList<>();
-        this.successorJobMap = new HashMap<>();
+        successorJobMap = new HashMap<>();
         for (Map<String, Object> jsonJob : jsonJobs) {
             Job job = new Job();
             job.setId(String.valueOf(id++));
@@ -273,11 +309,10 @@ public class DataModel extends JsonImporter {
               job.setJobType(STANDARD);
             }
             List<String> successorList = (List<String>) jsonJob.get("SuccessorList");
-            Pair<String, List<String>> successorPair = new Pair<>(job.getJID(), successorList);
-            this.successorJobMap.put(job.getJID(), successorList);
+            successorJobMap.put(job.getJID(), successorList);
             jobs.add(job);
         }
-
+        System.out.println(successorJobMap);
         return jobs;
     }
 
