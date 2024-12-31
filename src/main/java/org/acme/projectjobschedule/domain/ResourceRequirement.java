@@ -4,14 +4,11 @@ import org.acme.projectjobschedule.domain.resource.Resource;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class ResourceRequirement {
     private String RID;
     private String id;
     private ExecutionMode executionMode;
     private Resource resource;
-    @JsonProperty("Requirement")
     private int requirement;
 
     public ResourceRequirement() {
