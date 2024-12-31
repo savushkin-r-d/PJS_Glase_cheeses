@@ -9,7 +9,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(scope = Project.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Project {
 
+    private String PID;
     private String id;
+    private int priority;
+    private int vb;
+    private String gtin;
+    private int np;
     private int releaseDate;
     private int criticalPathDuration;
 
@@ -26,6 +31,14 @@ public class Project {
         this.criticalPathDuration = criticalPathDuration;
     }
 
+    public String getPID(){
+        return  PID;
+    }
+
+    public void setPID(String PID) {
+        this.PID = PID;
+    }
+
     public String getId() {
         return id;
     }
@@ -34,6 +47,37 @@ public class Project {
         this.id = id;
     }
 
+    public  int getVb (){
+        return vb;
+    }
+
+    public  void setVb (int vb ){
+        this.vb= vb;
+    }
+
+    public int getPriority(){
+        return priority;
+    }
+
+    public void setPriority(int priority){
+        this.priority=priority;
+    }
+
+    public String getGtin(){
+        return gtin;
+    }
+
+    public void setGtin(String gtin){
+        this.gtin=gtin;
+    }
+
+    public  int getNp(){
+        return np;
+    }
+
+    public void setNp(int np){
+        this.np=np;
+    }
     public int getReleaseDate() {
         return releaseDate;
     }

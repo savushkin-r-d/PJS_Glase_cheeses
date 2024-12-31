@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-//import jakarta.enterprise.context.ApplicationScoped;
-
 import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.ExecutionMode;
 import org.acme.projectjobschedule.domain.Job;
@@ -21,7 +19,6 @@ import org.acme.projectjobschedule.domain.ResourceRequirement;
 import org.acme.projectjobschedule.domain.resource.GlobalResource;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
 import org.acme.projectjobschedule.domain.resource.Resource;
-
 
 public class DemoDataGenerator {
 
