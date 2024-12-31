@@ -1,4 +1,4 @@
-package org.acme.projectjobschedule.app;
+package org.acme.projectjobschedule.data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public  Map<String, Object> getJsonMap(){
     System.out.println(jsonMap);
 }
 
-    protected void readOperationHashMap() {
+    public void readOperationHashMap() {
         try {
             // Путь к JSON-файлу
             File jsonFile = new File(filepath);
@@ -113,7 +113,6 @@ public  Map<String, Object> getJsonMap(){
         }
     }
 
-
     // Метод для преобразования JsonNode в List<String>
     private static List<String> parseStringList(JsonNode node) {
         List<String> list = new ArrayList<>();
@@ -122,6 +121,4 @@ public  Map<String, Object> getJsonMap(){
         }
         return list;
     }
-
-
 }

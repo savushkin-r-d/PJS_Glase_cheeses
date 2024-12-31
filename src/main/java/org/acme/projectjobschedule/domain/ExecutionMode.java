@@ -11,12 +11,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(scope = ExecutionMode.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ExecutionMode {
 
+
+    private  String JID;
     @PlanningId
     private String id;
     private Job job;
     private int duration; // In days
     private List<ResourceRequirement> resourceRequirements;
-    private  String JID;
+
 
     public ExecutionMode() {
     }

@@ -1,14 +1,12 @@
 package org.acme.projectjobschedule.app;
-import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.*;
-import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.Duration;
-import java.util.List;
+import org.acme.projectjobschedule.data.*;
 
 public class ProjectJobScheduleApp {
 
@@ -18,7 +16,6 @@ public class ProjectJobScheduleApp {
         SMALL,
         LARGE
     }
-
 
     public static void main(String[] args) {
 
@@ -40,43 +37,9 @@ public class ProjectJobScheduleApp {
 
         DataModel model = new DataModel(filePath);
         model.readOperationHashMap();
-        ProjectJobSchedule problem =model.generateProjectJobSchedule();
+        ProjectJobSchedule problem = model.generateProjectJobSchedule();
         // Solve the problem
-        Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
-        ProjectJobSchedule solution = solver.solve(problem);
-
-        System.out.println("ProjectList:");
-        for(Project project : problem.getProjects()){
-        System.out.println(project.getId());
-        System.out.println(project.getPID());
-            System.out.println(project.getPriority());
-            System.out.println(project.getVb());
-            System.out.println(project.getGtin());
-            System.out.println(project.getNp());
-            System.out.println();
-
-    }
-        System.out.println("ResourceList");
-        for(Resource resource : problem.getResources()){
-            System.out.println(resource.getId());
-            System.out.println(resource.getRID());
-            System.out.println(resource.getCapacity());
-            System.out.println(resource.isRenewable());
-            System.out.println();
-        }
-        System.out.println();
-
-        for (Job job : problem.getJobs()){
-            System.out.println(job.getId());
-            System.out.println("Job JID:" + job.getJID());
-            System.out.println(job.getJobType());
-            System.out.println("SuccessorJobs:");
-            List<Job> successorJobs = job.getSuccessorJobs();
-            for(Job successJob : successorJobs){
-                System.out.println("JID:" + successJob.getJID());
-            }
-        }
-
-
+       // Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
+        // ProjectJobSchedule solution = solver.solve(problem);
     }
 }
