@@ -1,4 +1,5 @@
 package org.acme.projectjobschedule.domain.resource;
+
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;

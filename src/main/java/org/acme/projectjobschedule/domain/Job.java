@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -14,12 +13,9 @@ public class Job {
     private String id;
     private Project project;
     private JobType jobType;
-    @JsonProperty("Duration")
     private int duration;
-    @JsonProperty("ExecutionModeList")
     private List<ExecutionMode> executionModes;
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("SuccessorList")
     private List<Job> successorJobs;
 
     public Job() {
