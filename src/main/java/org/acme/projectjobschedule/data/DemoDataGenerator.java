@@ -69,7 +69,6 @@ public class DemoDataGenerator {
             }
             jobsPerProject.add(new Job(String.valueOf(countJob++), project, SINK));
             // Add all jobs of the given project
-
             jobs.addAll(jobsPerProject);
             // Add the execution modes
             jobsPerProject.forEach(job -> generateExecutionModes(jobs, job,
