@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import org.acme.projectjobschedule.data.*;
+import java.util.List;
 
 public class ProjectJobScheduleApp {
 
@@ -42,5 +43,16 @@ public class ProjectJobScheduleApp {
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
         ProjectJobSchedule solution = solver.solve(problem);
+
+        List<Allocation> allocations = solution.getAllocations();
+
+// Вывод или обработка данных
+        for (Allocation allocation : allocations) {
+            System.out.println("ProjectCriticalPathEndDate: " + allocation.getProjectCriticalPathEndDate() +
+                    ", ProjectDelay: " + allocation.getProjectDelay() +
+                    ", JobType: " + allocation.getJobType() +
+                    ", StartDate: " + allocation.getStartDate() +
+                    ", EndDate: " + allocation.getEndDate());
     }
+}
 }
