@@ -58,6 +58,10 @@ public class DataModel extends JsonImporter {
         // Generate and add ExecutionModes
         generateExecutionMode(jobs, projects.size());
         List<ExecutionMode> executionModeList = getExecutionModes_fromJson();
+        int i =0 ;
+        for(ExecutionMode executionMode : executionModeList){
+            executionMode.setId(String.valueOf(i++));
+        }
         // ResourceRequirements
         List<ResourceRequirement> resourceRequirements = getResourceRequirements();
         // Allocations
@@ -69,6 +73,14 @@ public class DataModel extends JsonImporter {
         projectJobSchedule.setExecutionModes(executionModeList);
         projectJobSchedule.setResourceRequirements(resourceRequirements);
         projectJobSchedule.setAllocations(allocations);
+        for(Resource resource : resources) {
+            for (ResourceRequirement requirement : resourceRequirements) {
+                if (resource.getRID().equals(requirement.getRID())) {
+                            requirement.setResource(resource);
+                }
+            }
+        }
+
         return projectJobSchedule;
     }
 

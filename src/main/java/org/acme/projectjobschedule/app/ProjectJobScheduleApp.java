@@ -1,5 +1,6 @@
 package org.acme.projectjobschedule.app;
 import ai.timefold.solver.core.api.solver.SolverFactory;
+import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.config.solver.SolverConfig;
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
@@ -39,7 +40,7 @@ public class ProjectJobScheduleApp {
         model.readOperationHashMap();
         ProjectJobSchedule problem = model.generateProjectJobSchedule();
         // Solve the problem
-       // Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
-        // ProjectJobSchedule solution = solver.solve(problem);
+        Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
+        ProjectJobSchedule solution = solver.solve(problem);
     }
 }
