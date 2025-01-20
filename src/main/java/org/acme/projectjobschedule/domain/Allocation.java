@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.time.LocalDate;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
@@ -30,6 +31,9 @@ public class Allocation {
     @PlanningId
     private String id;
     private Job job;
+
+    private LocalDate jsonStartDate;
+    private LocalDate jsonEndDate;
 
     @JsonIdentityReference(alwaysAsId = true)
     private Allocation sourceAllocation;

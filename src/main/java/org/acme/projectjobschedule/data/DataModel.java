@@ -21,7 +21,8 @@ public class DataModel extends JsonImporter {
     private String StartDate;
     private String EndDate;
     private String Termination;
-
+    private int TS;
+    private int US;
     private List<Resource> resources;
     private List <ExecutionMode> executionModes_fromJson;
     private Map<String, List<String>> successorJobMap;
@@ -32,22 +33,23 @@ public class DataModel extends JsonImporter {
         super(filepath);
     }
 
-    public List<Resource> getResourceList() {
+    private List<Resource> getResourceList() {
         return resources;
     }
-
-    public List<ExecutionMode> getExecutionModes_fromJson() {
+    private List<ExecutionMode> getExecutionModes_fromJson() {
         return executionModes_fromJson;
     }
-
     private List<ResourceRequirement> getResourceRequirements(){
         return resourceRequirementList;
     }
 
+    public int getTS(){ return TS;}
+    public int getUS(){ return US;}
+
     public ProjectJobSchedule generateProjectJobSchedule(){
 
         ProjectJobSchedule projectJobSchedule = new ProjectJobSchedule();
-
+        initBase();
         // Projects
         List<Project> projects = initProject();
         // Resources
@@ -218,20 +220,21 @@ public class DataModel extends JsonImporter {
                 if(job.getJID().equals(key)){
                     if(strList.isEmpty()){
                         successorJobs = Collections.emptyList();
+                        job.setSuccessorJobs(successorJobs);
                     }
                     else{
                         for(String str : strList){
                             for(Job job1 : jobs){
                                 if(job1.equals(job)) continue;
-                                if(job1.getJID().equals(str)) {
+                                if(job1.getJID().equals(str) && job.getProject().getPID().equals(job1.getProject().getPID())) {
                                     successorJobs.add(job1);
                                 };
                             }
                         }
-
+                        job.setSuccessorJobs(successorJobs);
                     }
                 }
-                job.setSuccessorJobs(successorJobs);
+
             }
         }
         return jobs;
@@ -323,7 +326,9 @@ public class DataModel extends JsonImporter {
         this.StartDate = (String) jsonMap.get("StartDate");
         this.EndDate = (String) jsonMap.get("EndDate");
         this.Termination = (String) jsonMap.get("Termination");
-
+        String[] parts = Termination.split(";");
+        this.TS= Integer.parseInt(parts[0].replaceAll("\\D+", ""));
+        this.US=  Integer.parseInt(parts[1].replaceAll("\\D+", ""));
     }
     public record Pair<K, V>(K key, V value) {}
 }
