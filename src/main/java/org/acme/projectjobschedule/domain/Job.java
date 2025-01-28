@@ -53,6 +53,7 @@ public class Job {
     public Project getProject() {
         return project;
     }
+    public int getDuration(){ return duration;}
 
     public void setProject(Project project) {
         this.project = project;

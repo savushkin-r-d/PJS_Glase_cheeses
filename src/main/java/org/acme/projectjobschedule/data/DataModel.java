@@ -45,6 +45,7 @@ public class DataModel extends JsonImporter {
 
     public int getTS(){ return TS;}
     public int getUS(){ return US;}
+    public String getID(){ return ID;}
 
     public ProjectJobSchedule generateProjectJobSchedule(){
 
@@ -58,12 +59,7 @@ public class DataModel extends JsonImporter {
         List<Job> jobsFromJson  = initJobList();
         List<Job> jobs = generateJobs(jobsFromJson, projects, resources);
         // Generate and add ExecutionModes
-        generateExecutionMode(jobs, projects.size());
-        List<ExecutionMode> executionModeList = getExecutionModes_fromJson();
-        int i =0 ;
-        for(ExecutionMode executionMode : executionModeList){
-            executionMode.setId(String.valueOf(i++));
-        }
+        List<ExecutionMode> executionModeList = generateExecutionMode(jobs, projects.size());
         // ResourceRequirements
         List<ResourceRequirement> resourceRequirements = getResourceRequirements();
         // Allocations
@@ -80,6 +76,12 @@ public class DataModel extends JsonImporter {
                 if (resource.getRID().equals(requirement.getRID())) {
                             requirement.setResource(resource);
                 }
+            }
+        }
+        for(ExecutionMode executionMode : executionModeList){
+            List<ResourceRequirement> exResourceRequirement= executionMode.getResourceRequirements();
+            for(ResourceRequirement requirement : exResourceRequirement){
+                requirement.setExecutionMode(executionMode);
             }
         }
 
@@ -240,9 +242,9 @@ public class DataModel extends JsonImporter {
         return jobs;
     }
 
-    private void generateExecutionMode(List<Job> jobs, int projectsSize){
+    private List<ExecutionMode> generateExecutionMode(List<Job> jobs, int projectsSize){
         List<ExecutionMode> executionModeList = new ArrayList<>();
-
+        int index=0;
             for (int i = 0; i < projectsSize; ++i) {
                 String id = String.valueOf(i);
                 List<ExecutionMode> executionModeSink = new ArrayList<>();
@@ -253,27 +255,44 @@ public class DataModel extends JsonImporter {
 
                     if (executionMode.getJID().equals("SINK") && executionMode.getId().equals(id)) {
                             executionModeSink.add(executionMode);
+                            executionModeList.add(executionMode);
                     }
                     else if(executionMode.getJID().equals("SOURCE") && executionMode.getId().equals(id)){
                         executionModeSource.add(executionMode);
+                        executionModeList.add(executionMode);
                     }
                     else if(executionMode.getJID()!=null && executionMode.getId().equals(id)) {
                         executionModeStandard.add(executionMode);
+                        executionModeList.add(executionMode);
                     }
                 }
                 for(Job job: jobs){
                     if(job.getJobType().equals(SINK) && job.getProject().getId().equals(id)){
+                        for(ExecutionMode executionMode : executionModeSink){
+                            executionMode.setJob(job);
+                        }
                         job.setExecutionModes(executionModeSink);
+
                     }
                     else if(job.getJobType().equals(SOURCE) && job.getProject().getId().equals(id)){
+                        for(ExecutionMode executionMode : executionModeSource){
+                            executionMode.setJob(job);
+                        }
                         job.setExecutionModes(executionModeSource);
                     }
                     else if( job.getProject().getId().equals(id)){
                         job.setJobType(STANDARD);
+                        for(ExecutionMode executionMode : executionModeStandard){
+                            executionMode.setJob(job);
+                        }
                         job.setExecutionModes(executionModeStandard);
                     }
                 }
         }
+            for(ExecutionMode executionMode : executionModeList){
+                executionMode.setId(String.valueOf(++index));
+            }
+            return executionModeList;
     }
 
     private List<Allocation> generateAllocations(List<Job> jobs) {

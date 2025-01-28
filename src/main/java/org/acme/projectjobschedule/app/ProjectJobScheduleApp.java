@@ -1,4 +1,5 @@
 package org.acme.projectjobschedule.app;
+import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.config.solver.SolverConfig;
@@ -23,9 +24,8 @@ public class ProjectJobScheduleApp {
     public static void main(String[] args) {
 
         // Load the problem from JSON
-        String filePath = "src/main/resources/data.json"; // Путь к файлу JSON
-
-
+        String filePath = "src/main/resources/importData.json"; // Путь к файлу JSON
+        
         DataModel model = new DataModel(filePath);
         model.readOperationHashMap();
         ProjectJobSchedule problem = model.generateProjectJobSchedule();
@@ -41,16 +41,17 @@ public class ProjectJobScheduleApp {
                         .withUnimprovedSpentLimit(Duration.ofSeconds(model.getUS())))); // Или 1 минута без улучшений
 
         // Load the problem
-        //   DemoDataGenerator demo_data = new DemoDataGenerator();
-        //  ProjectJobSchedule problem = demo_data.generateDemoData();
-
+         DemoDataGenerator demo_data = new DemoDataGenerator();
+        ProjectJobSchedule problem1 = demo_data.generateDemoData();
 
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
         ProjectJobSchedule solution = solver.solve(problem);
 
+        HardMediumSoftScore score = problem.getScore();
+
         List<Allocation> allocations = solution.getAllocations();
-        List<Job> jobs = solution.getJobs();
+        int hardScore = score.hardScore();
         // Вывод или обработка данных
         for (Allocation allocation : allocations) {
             System.out.println();
@@ -65,7 +66,19 @@ public class ProjectJobScheduleApp {
                 for (Allocation successorAllocation : allocation.getSuccessorAllocations()) {
                     System.out.print(successorAllocation.getId() + ",");
                 }
-            } else if (allocation.getPredecessorAllocations().isEmpty() && allocation.getSuccessorAllocations().isEmpty()) {
+            }
+            else if (!allocation.getPredecessorAllocations().isEmpty() && !allocation.getSuccessorAllocations().isEmpty()) {
+                System.out.print("predecessorAllocations id: ");
+                for (Allocation predeseccorAllocation : allocation.getPredecessorAllocations()) {
+                    System.out.print(predeseccorAllocation.getId() + ",");
+                }
+                System.out.println();
+                System.out.print("successorAllocations id: ");
+                for (Allocation successorAllocation : allocation.getSuccessorAllocations()) {
+                    System.out.print( successorAllocation.getId() + ",");
+                }
+            }
+            else if (allocation.getPredecessorAllocations().isEmpty() && allocation.getSuccessorAllocations().isEmpty()) {
                 System.out.println("predecessorAllocations is empty!");
                 System.out.println("successorAllocations is empty!");
             } else if (!allocation.getPredecessorAllocations().isEmpty() && allocation.getSuccessorAllocations().isEmpty()) {
@@ -78,26 +91,11 @@ public class ProjectJobScheduleApp {
             }
         }
 
-        for (Job job : jobs) {
-            System.out.println();
-            System.out.println();
-            System.out.println("Job id: " + job.getId());
-            System.out.println("Project id: " + job.getProject().getId());
-            System.out.println("Jobtype: " + job.getJobType());
-            if (job.getExecutionModes().isEmpty()) {
-                System.out.println("ExecutionModeList: empty");
-            } else {
-                System.out.print("ExecutionModeList: ");
-                for (ExecutionMode executionMode : job.getExecutionModes()) {
-                    System.out.print(executionMode.getId() + ",");
-                }
-
-            }
-
-
-        }
+        JsonExporter exporter = new JsonExporter(score, model.getID(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
+        exporter.convertToJsonFile("src/main/resources/exportData.json");
+    }
 
 
     }
-}
+
 
