@@ -32,9 +32,6 @@ public class Allocation {
     private String id;
     private Job job;
 
-    private LocalDate jsonStartDate;
-    private LocalDate jsonEndDate;
-
     @JsonIdentityReference(alwaysAsId = true)
     private Allocation sourceAllocation;
     @JsonIdentityReference(alwaysAsId = true)

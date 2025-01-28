@@ -1,0 +1,90 @@
+{
+  "ID" : "P1570C30",
+  "HardConstraintsPenalty" : 0,
+  "MediumConstraintsPenalty1" : -12,
+  "SoftConstraintsPenalty" : -8,
+  "Projects" : [ "163", "164", "165" ],
+  "Resources" : [ "Line1", "Line2" ],
+  "AllocationList" : [ {
+    "ID" : "Allocation1",
+    "PID" : "0",
+    "JID" : "0",
+    "StartDate" : "0",
+    "EndDate" : "0",
+    "Duration" : 0,
+    "PredAllocationList" : [ ],
+    "ResourceRequirementList" : [ ]
+  }, {
+    "ID" : "Allocation2",
+    "PID" : "0",
+    "JID" : "1",
+    "StartDate" : "0",
+    "EndDate" : "60",
+    "Duration" : 60,
+    "PredAllocationList" : [ "Allocation1" ],
+    "ResourceRequirementList" : [ "Line1" ]
+  }, {
+    "ID" : "Allocation3",
+    "PID" : "0",
+    "JID" : "2",
+    "StartDate" : "60",
+    "EndDate" : "60",
+    "Duration" : 0,
+    "PredAllocationList" : [ "Allocation2" ],
+    "ResourceRequirementList" : [ ]
+  }, {
+    "ID" : "Allocation4",
+    "PID" : "1",
+    "JID" : "3",
+    "StartDate" : "4",
+    "EndDate" : "4",
+    "Duration" : 0,
+    "PredAllocationList" : [ ],
+    "ResourceRequirementList" : [ ]
+  }, {
+    "ID" : "Allocation5",
+    "PID" : "1",
+    "JID" : "4",
+    "StartDate" : "4",
+    "EndDate" : "74",
+    "Duration" : 70,
+    "PredAllocationList" : [ "Allocation4" ],
+    "ResourceRequirementList" : [ "Line2" ]
+  }, {
+    "ID" : "Allocation6",
+    "PID" : "1",
+    "JID" : "5",
+    "StartDate" : "74",
+    "EndDate" : "74",
+    "Duration" : 0,
+    "PredAllocationList" : [ "Allocation5" ],
+    "ResourceRequirementList" : [ ]
+  }, {
+    "ID" : "Allocation7",
+    "PID" : "2",
+    "JID" : "6",
+    "StartDate" : "8",
+    "EndDate" : "8",
+    "Duration" : 0,
+    "PredAllocationList" : [ ],
+    "ResourceRequirementList" : [ ]
+  }, {
+    "ID" : "Allocation8",
+    "PID" : "2",
+    "JID" : "7",
+    "StartDate" : "60",
+    "EndDate" : "120",
+    "Duration" : 60,
+    "PredAllocationList" : [ "Allocation7" ],
+    "ResourceRequirementList" : [ "Line1" ]
+  }, {
+    "ID" : "Allocation9",
+    "PID" : "2",
+    "JID" : "8",
+    "StartDate" : "120",
+    "EndDate" : "120",
+    "Duration" : 0,
+    "PredAllocationList" : [ "Allocation8" ],
+    "ResourceRequirementList" : [ ]
+  } ]
+}

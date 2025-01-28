@@ -44,7 +44,7 @@ public class JsonExporter {
         for(Allocation allocation : allocationList){
             JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getId(),
                     allocation.getJob().getId(),String.valueOf(allocation.getStartDate()),
-                    String.valueOf(allocation.getEndDate()), String.valueOf(allocation.getJob().getDuration()),requirementList,
+                    String.valueOf(allocation.getEndDate()), allocation.getExecutionMode().getDuration(),requirementList,
                     allocation.getExecutionMode(), allocation.getPredecessorAllocations());
             jallocationList.add(jallocation);
         }
@@ -78,7 +78,7 @@ public class JsonExporter {
         private String jid;
         private String startDate;
         private String endDate;
-        private String duration;
+        private int duration;
         private List<String> resourceRequirementList;
         private List<String> predAllocationList;
 
@@ -109,7 +109,7 @@ public class JsonExporter {
         }
 
         @JsonProperty("Duration")
-        public String getDuration() {
+        public int getDuration() {
             return duration;
         }
 
@@ -124,7 +124,7 @@ public class JsonExporter {
         }
 
         public JsonAllocationList(String id, String pid, String jid, String startDate,
-                              String endDate, String duration, List<ResourceRequirement> requirementsList,
+                              String endDate, int duration, List<ResourceRequirement> requirementsList,
                               ExecutionMode executionMode,
                               List<Allocation> predAllocationlist){
             int numericId = Integer.valueOf(id) + 1;
