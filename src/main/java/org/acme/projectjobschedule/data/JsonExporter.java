@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.acme.projectjobschedule.domain.Project;
 import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.domain.ResourceRequirement;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.time.LocalDateTime;
 
 public class JsonExporter {
 
@@ -23,7 +25,8 @@ public class JsonExporter {
     private List<JsonAllocationList> jallocationList;
     private List<String> projectsPid;
     private List<String> resourcesRid;
-    public JsonExporter(HardMediumSoftScore score, String ID, List<Project> projects, List<Resource> resources,
+
+    public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, LocalDateTime EndDate, List<Project> projects, List<Resource> resources,
                         List<ResourceRequirement> requirementList,  List<Allocation> allocationList) {
         this.jallocationList = new ArrayList<>();
         this.projectsPid = new ArrayList<>();
@@ -42,9 +45,9 @@ public class JsonExporter {
         }
 
         for(Allocation allocation : allocationList){
-            JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getId(),
-                    allocation.getJob().getId(),String.valueOf(allocation.getStartDate()),
-                    String.valueOf(allocation.getEndDate()), allocation.getExecutionMode().getDuration(),requirementList,
+            JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getPID(),
+                    allocation.getJob().getJID(), StartDate, EndDate, allocation.getStartDate(),
+                    allocation.getEndDate(),  allocation.getExecutionMode().getDuration(),requirementList,
                     allocation.getExecutionMode(), allocation.getPredecessorAllocations());
             jallocationList.add(jallocation);
         }
@@ -73,6 +76,8 @@ public class JsonExporter {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     static class JsonAllocationList{
 
+        // Формат даты и времени
+        private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         private String id;
         private String pid;
         private String jid;
@@ -123,16 +128,18 @@ public class JsonExporter {
             return predAllocationList;
         }
 
-        public JsonAllocationList(String id, String pid, String jid, String startDate,
-                              String endDate, int duration, List<ResourceRequirement> requirementsList,
+        public JsonAllocationList(String id, String pid, String jid, LocalDateTime startDate, LocalDateTime endDate, int allocStartDate,
+                              int allocEndDate, int duration, List<ResourceRequirement> requirementsList,
                               ExecutionMode executionMode,
                               List<Allocation> predAllocationlist){
             int numericId = Integer.valueOf(id) + 1;
             this.id = "Allocation" + numericId;
-            this.pid = pid;
+            this.pid = (pid.length() > 4)
+                    ? pid.substring(4)
+                    : pid;
             this.jid = jid;
-            this.startDate = startDate;
-            this.endDate = endDate;
+            this.startDate = String.valueOf(startDate.plusMinutes(allocStartDate));
+            this.endDate = String.valueOf(endDate.plusMinutes(allocEndDate));
             this.duration = duration;
             this.resourceRequirementList = new ArrayList<>();
             this.predAllocationList = new ArrayList<>();

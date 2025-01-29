@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.GlobalResource;
 import org.acme.projectjobschedule.domain.resource.LocalResource;
@@ -12,17 +11,20 @@ import org.acme.projectjobschedule.domain.resource.Resource;
 import org.acme.projectjobschedule.domain.ExecutionMode;
 import org.acme.projectjobschedule.domain.Allocation;
 import org.acme.projectjobschedule.domain.ProjectJobSchedule;
-
 import static org.acme.projectjobschedule.domain.JobType.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DataModel extends JsonImporter {
 
-    private String ID;
-    private String StartDate;
-    private String EndDate;
+    // Формат даты и времени
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private String id;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String Termination;
-    private int TS;
-    private int US;
+    private int ts;
+    private int us;
     private List<Resource> resources;
     private List <ExecutionMode> executionModes_fromJson;
     private Map<String, List<String>> successorJobMap;
@@ -43,9 +45,12 @@ public class DataModel extends JsonImporter {
         return resourceRequirementList;
     }
 
-    public int getTS(){ return TS;}
-    public int getUS(){ return US;}
-    public String getID(){ return ID;}
+    public int getTS(){ return ts;}
+    public int getUS(){ return us;}
+    public String getID(){ return id;}
+    public LocalDateTime getStartDate(){ return startDate;}
+    public LocalDateTime getEndDate(){ return endDate;}
+
 
     public ProjectJobSchedule generateProjectJobSchedule(){
 
@@ -341,13 +346,13 @@ public class DataModel extends JsonImporter {
     }
 
     private void initBase() {
-        this.ID = (String) jsonMap.get("ID");
-        this.StartDate = (String) jsonMap.get("StartDate");
-        this.EndDate = (String) jsonMap.get("EndDate");
+        this.id = (String) jsonMap.get("ID");
+        this.startDate = LocalDateTime.parse((String)jsonMap.get("StartDate"), formatter);
+        this.endDate =LocalDateTime.parse((String)jsonMap.get("EndDate"), formatter);
         this.Termination = (String) jsonMap.get("Termination");
         String[] parts = Termination.split(";");
-        this.TS= Integer.parseInt(parts[0].replaceAll("\\D+", ""));
-        this.US=  Integer.parseInt(parts[1].replaceAll("\\D+", ""));
+        this.ts= Integer.parseInt(parts[0].replaceAll("\\D+", ""));
+        this.us=  Integer.parseInt(parts[1].replaceAll("\\D+", ""));
     }
     public record Pair<K, V>(K key, V value) {}
 }

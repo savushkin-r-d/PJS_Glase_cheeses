@@ -91,7 +91,7 @@ public class ProjectJobScheduleApp {
             }
         }
 
-        JsonExporter exporter = new JsonExporter(score, model.getID(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
+        JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(), model.getEndDate(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
         exporter.convertToJsonFile("src/main/resources/exportData.json");
     }
 
