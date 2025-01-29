@@ -20,11 +20,13 @@ public class DataModel extends JsonImporter {
     // Формат даты и времени
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private String id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
     private String Termination;
     private int ts;
     private int us;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
+
     private List<Resource> resources;
     private List <ExecutionMode> executionModes_fromJson;
     private Map<String, List<String>> successorJobMap;
@@ -57,14 +59,14 @@ public class DataModel extends JsonImporter {
         ProjectJobSchedule projectJobSchedule = new ProjectJobSchedule();
         initBase();
         // Projects
-        List<Project> projects = initProject();
+        List<Project> projects = generateProjects();
         // Resources
-        List<Resource> resources = initResource();
+        List<Resource> resources = generateResources();
         // Jobs
-        List<Job> jobsFromJson  = initJobList();
+        List<Job> jobsFromJson  = readJobList();
         List<Job> jobs = generateJobs(jobsFromJson, projects, resources);
         // Generate and add ExecutionModes
-        List<ExecutionMode> executionModeList = generateExecutionMode(jobs, projects.size());
+        List<ExecutionMode> executionModeList = generateExecutionModes(jobs, projects.size());
         // ResourceRequirements
         List<ResourceRequirement> resourceRequirements = getResourceRequirements();
         // Allocations
@@ -76,25 +78,11 @@ public class DataModel extends JsonImporter {
         projectJobSchedule.setExecutionModes(executionModeList);
         projectJobSchedule.setResourceRequirements(resourceRequirements);
         projectJobSchedule.setAllocations(allocations);
-        for(Resource resource : resources) {
-            for (ResourceRequirement requirement : resourceRequirements) {
-                if (resource.getRID().equals(requirement.getRID())) {
-                            requirement.setResource(resource);
-                }
-            }
-        }
-        for(ExecutionMode executionMode : executionModeList){
-            List<ResourceRequirement> exResourceRequirement= executionMode.getResourceRequirements();
-            for(ResourceRequirement requirement : exResourceRequirement){
-                requirement.setExecutionMode(executionMode);
-            }
-        }
-
         return projectJobSchedule;
     }
 
-    private  List<Project> initProject() {
-        List<Project> projects1 = new ArrayList<>();
+    private  List<Project> generateProjects() {
+        List<Project> projects = new ArrayList<>();
         this.executionModes_fromJson = new ArrayList<>();
         this.resourceRequirementList = new ArrayList<>();
         int project_id = 0;
@@ -115,7 +103,7 @@ public class DataModel extends JsonImporter {
             int np = (int) jsonProject.get("NP");
             project.setNp(np);
 
-            projects1.add(project);
+            projects.add(project);
 
             List<Map<String, Object>> jsonExecutionModeList = (List<Map<String, Object>>) jsonProject.get("ExecutionModeList");
             for (Map<String, Object> jsonExecutionMode : jsonExecutionModeList) {
@@ -139,11 +127,11 @@ public class DataModel extends JsonImporter {
             }
             ++project_id;
         }
-        return projects1;
+        return projects;
     }
 
-    private List<Resource> initResource(){
-        List<Resource> resources1 = new ArrayList<>();
+    private List<Resource> generateResources(){
+        List<Resource> resources = new ArrayList<>();
         int id=0;
         List<Map<String, Object>> jsonResourceList = (List<Map<String, Object>>) jsonMap.get("ResourceList");
         for (Map<String, Object> jsonResource : jsonResourceList) {
@@ -161,7 +149,7 @@ public class DataModel extends JsonImporter {
                 } else {
                     this.RestrictionList = Collections.emptyList();
                 }
-                resources1.add(globalResource);
+                resources.add(globalResource);
 
             } else if (jsonResource.get("@type").equals("local")) {
                 LocalResource localResource = new LocalResource();
@@ -175,14 +163,21 @@ public class DataModel extends JsonImporter {
                 } else {
                     this.RestrictionList = Collections.emptyList();
                 }
-                resources1.add(localResource);
+                resources.add(localResource);
             }
             ++id;
         }
-        return resources1;
+        for(Resource resource : resources) {
+            for (ResourceRequirement requirement : resourceRequirementList) {
+                if (resource.getRID().equals(requirement.getRID())) {
+                    requirement.setResource(resource);
+                }
+            }
+        }
+        return resources;
     }
 
-    private List<Job> initJobList() {
+    private List<Job> readJobList() {
         List<Map<String, Object>> jsonJobs = (List<Map<String, Object>>) jsonMap.get("JobList");
         int id =0;
         List<Job> jobs = new ArrayList<>();
@@ -247,7 +242,7 @@ public class DataModel extends JsonImporter {
         return jobs;
     }
 
-    private List<ExecutionMode> generateExecutionMode(List<Job> jobs, int projectsSize){
+    private List<ExecutionMode> generateExecutionModes(List<Job> jobs, int projectsSize){
         List<ExecutionMode> executionModeList = new ArrayList<>();
         int index=0;
             for (int i = 0; i < projectsSize; ++i) {
@@ -296,6 +291,9 @@ public class DataModel extends JsonImporter {
         }
             for(ExecutionMode executionMode : executionModeList){
                 executionMode.setId(String.valueOf(++index));
+                for(ResourceRequirement requirement : executionMode.getResourceRequirements()){
+                    requirement.setExecutionMode(executionMode);
+                }
             }
             return executionModeList;
     }

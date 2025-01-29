@@ -41,8 +41,8 @@ public class ProjectJobScheduleApp {
                         .withUnimprovedSpentLimit(Duration.ofSeconds(model.getUS())))); // Или 1 минута без улучшений
 
         // Load the problem
-         DemoDataGenerator demo_data = new DemoDataGenerator();
-        ProjectJobSchedule problem1 = demo_data.generateDemoData();
+        //DemoDataGenerator demo_data = new DemoDataGenerator();
+       // ProjectJobSchedule problem1 = demo_data.generateDemoData();
 
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
@@ -53,43 +53,6 @@ public class ProjectJobScheduleApp {
         List<Allocation> allocations = solution.getAllocations();
         int hardScore = score.hardScore();
         // Вывод или обработка данных
-        for (Allocation allocation : allocations) {
-            System.out.println();
-            System.out.println();
-            System.out.println("Allocation id: " + allocation.getId());
-            System.out.println("sourceAllocation id: " + allocation.getSourceAllocation().getId());
-            System.out.println("sinkAllocation id: " + allocation.getSinkAllocation().getId());
-
-            if (allocation.getPredecessorAllocations().isEmpty() && !allocation.getSuccessorAllocations().isEmpty()) {
-                System.out.println("predecessorAllocations is empty!");
-                System.out.print("successorAllocations id: ");
-                for (Allocation successorAllocation : allocation.getSuccessorAllocations()) {
-                    System.out.print(successorAllocation.getId() + ",");
-                }
-            }
-            else if (!allocation.getPredecessorAllocations().isEmpty() && !allocation.getSuccessorAllocations().isEmpty()) {
-                System.out.print("predecessorAllocations id: ");
-                for (Allocation predeseccorAllocation : allocation.getPredecessorAllocations()) {
-                    System.out.print(predeseccorAllocation.getId() + ",");
-                }
-                System.out.println();
-                System.out.print("successorAllocations id: ");
-                for (Allocation successorAllocation : allocation.getSuccessorAllocations()) {
-                    System.out.print( successorAllocation.getId() + ",");
-                }
-            }
-            else if (allocation.getPredecessorAllocations().isEmpty() && allocation.getSuccessorAllocations().isEmpty()) {
-                System.out.println("predecessorAllocations is empty!");
-                System.out.println("successorAllocations is empty!");
-            } else if (!allocation.getPredecessorAllocations().isEmpty() && allocation.getSuccessorAllocations().isEmpty()) {
-                System.out.print("predecessorAllocations id: ");
-                for (Allocation predeseccorAllocation : allocation.getPredecessorAllocations()) {
-                    System.out.print(predeseccorAllocation.getId() + ",");
-                }
-                System.out.println();
-                System.out.println("successorAllocations is empty!");
-            }
-        }
 
         JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(), model.getEndDate(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
         exporter.convertToJsonFile("src/main/resources/exportData.json");
