@@ -139,7 +139,7 @@ public class JsonExporter {
                     : pid;
             this.jid = jid;
             this.startDate = String.valueOf(startDate.plusMinutes(allocStartDate).format(formatter));
-            this.endDate = String.valueOf(endDate.plusMinutes(allocEndDate).format(formatter));
+            this.endDate = String.valueOf(startDate.plusMinutes(allocStartDate + duration).format(formatter));
             this.duration = duration;
             this.resourceRequirementList = new ArrayList<>();
             this.predAllocationList = new ArrayList<>();
