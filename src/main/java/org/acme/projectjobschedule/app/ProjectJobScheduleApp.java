@@ -54,7 +54,7 @@ public class ProjectJobScheduleApp {
         int hardScore = score.hardScore();
         // Вывод или обработка данных
 
-        JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(), model.getEndDate(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
+        JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
         exporter.convertToJsonFile("src/main/resources/exportData.json");
     }
 

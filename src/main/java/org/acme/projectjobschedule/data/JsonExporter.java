@@ -26,8 +26,8 @@ public class JsonExporter {
     private List<String> projectsPid;
     private List<String> resourcesRid;
 
-    public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, LocalDateTime EndDate, List<Project> projects, List<Resource> resources,
-                        List<ResourceRequirement> requirementList,  List<Allocation> allocationList) {
+    public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, List<Project> projects, List<Resource> resources,
+                        List<ResourceRequirement> requirementList, List<Allocation> allocationList) {
         this.jallocationList = new ArrayList<>();
         this.projectsPid = new ArrayList<>();
         this.resourcesRid = new ArrayList<>();
@@ -46,8 +46,7 @@ public class JsonExporter {
 
         for(Allocation allocation : allocationList){
             JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getPID(),
-                    allocation.getJob().getJID(), StartDate, EndDate, allocation.getStartDate(),
-                    allocation.getEndDate(),  allocation.getExecutionMode().getDuration(),requirementList,
+                    allocation.getJob().getJID(), StartDate, allocation.getStartDate(),  allocation.getExecutionMode().getDuration(),requirementList,
                     allocation.getExecutionMode(), allocation.getPredecessorAllocations());
             jallocationList.add(jallocation);
         }
@@ -128,8 +127,8 @@ public class JsonExporter {
             return predAllocationList;
         }
 
-        public JsonAllocationList(String id, String pid, String jid, LocalDateTime startDate, LocalDateTime endDate, int allocStartDate,
-                              int allocEndDate, int duration, List<ResourceRequirement> requirementsList,
+        public JsonAllocationList(String id, String pid, String jid, LocalDateTime startDate, int allocStartDate,
+                              int duration, List<ResourceRequirement> requirementsList,
                               ExecutionMode executionMode,
                               List<Allocation> predAllocationlist){
             int numericId = Integer.valueOf(id) + 1;
