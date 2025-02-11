@@ -1,0 +1,21 @@
+Explanation of score (0hard/-254medium/-120soft):
+    Constraint matches:
+        -254medium: constraint (Total project delay) has 3 matches:
+            -120medium: justified with ([Allocation-8])
+            -74medium: justified with ([Allocation-5])
+            ...
+        -120soft: constraint (Total makespan) has 1 matches:
+            -120soft: justified with ([120])
+        0: constraint (Non-renewable resource capacity) has 0 matches:
+        0: constraint (Renewable resource capacity) has 0 matches:
+    Indictments:
+        -120medium: indicted with (Allocation-8) has 1 matches:
+            -120medium: constraint (Total project delay)
+        -74medium: indicted with (Allocation-5) has 1 matches:
+            -74medium: constraint (Total project delay)
+        -60medium: indicted with (Allocation-2) has 1 matches:
+            -60medium: constraint (Total project delay)
+        -120soft: indicted with (120) has 1 matches:
+            -120soft: constraint (Total makespan)
+
+E

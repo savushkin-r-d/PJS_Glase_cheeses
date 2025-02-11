@@ -56,6 +56,10 @@
     <groupId>ai.timefold.solver</groupId>
     <artifactId>timefold-solver-core</artifactId>
 </dependency>
+    <dependency>
+        <groupId>ai.timefold.solver</groupId>
+        <artifactId>timefold-solver-benchmark</artifactId>
+    </dependency>
 <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-classic</artifactId>

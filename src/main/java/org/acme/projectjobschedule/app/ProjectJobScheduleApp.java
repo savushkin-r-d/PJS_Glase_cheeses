@@ -1,5 +1,10 @@
 package org.acme.projectjobschedule.app;
+
+import ai.timefold.solver.core.api.score.ScoreExplanation;
+import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
+import ai.timefold.solver.core.api.solver.SolutionManager;
 import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.config.solver.SolverConfig;
@@ -11,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import org.acme.projectjobschedule.data.*;
 import java.util.List;
+import java.io.*;
 
 public class ProjectJobScheduleApp {
 
@@ -19,6 +25,22 @@ public class ProjectJobScheduleApp {
     public enum DemoData {
         SMALL,
         LARGE
+    }
+
+    private static void printScoreAnalysis(ScoreAnalysis<HardSoftScore> scoreAnalysis) {
+        System.out.println("Score analysis (" + scoreAnalysis.score() + ")");
+
+        for (var entry : scoreAnalysis.constraintMap().entrySet()) {
+            var constraintId = entry.getKey();
+            var matchTotal = entry.getValue();
+            System.out.println("constraintId:" +
+                    constraintId);
+            System.out.println("constraintName:" + matchTotal.constraintName());
+            System.out.println("matchCount:" + matchTotal.matchCount() );
+            System.out.println("Totalscore:" + matchTotal.score());
+            System.out.println("Totalweight:" + matchTotal.weight());
+            System.out.println();
+        }
     }
 
     public static void main(String[] args) {
@@ -48,17 +70,37 @@ public class ProjectJobScheduleApp {
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
         ProjectJobSchedule solution = solver.solve(problem);
 
+        SolutionManager<ProjectJobSchedule, HardMediumSoftScore> solutionManager = SolutionManager.create(solverFactory);
+        ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation = solutionManager.explain(solution);
+
+        ScoreAnalysis<HardMediumSoftScore> scoreAnalysis = solutionManager.analyze(solution);
+
         HardMediumSoftScore score = problem.getScore();
 
         List<Allocation> allocations = solution.getAllocations();
         int hardScore = score.hardScore();
         // Вывод или обработка данных
 
-        JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(), problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),allocations);
+        JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(),
+                problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),
+                allocations,scoreExplanation);
         exporter.convertToJsonFile("src/main/resources/exportData.json");
+
+        try(FileWriter writer = new FileWriter("src/main/resources/score_explain.txt", false))
+        {
+            // запись всей строки
+            writer.write(String.valueOf(solutionManager.explain(solution)));
+            // запись по символам
+            writer.append('\n');
+            writer.append('E');
+
+            writer.flush();
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
     }
-
-
     }
 
 

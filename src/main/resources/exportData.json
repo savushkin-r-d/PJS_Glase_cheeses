@@ -6,15 +6,6 @@
   "Projects" : [ "163", "164", "165" ],
   "Resources" : [ "Line1", "Line2" ],
   "AllocationList" : [ {
-    "ID" : "Allocation1",
-    "PID" : "163",
-    "JID" : "SOURCE",
-    "StartDate" : "2025-02-02 00:00:00",
-    "EndDate" : "2025-02-02 00:00:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ ],
-    "ResourceRequirementList" : [ ]
-  }, {
     "ID" : "Allocation2",
     "PID" : "163",
     "JID" : "Job1",
@@ -23,24 +14,6 @@
     "Duration" : 60,
     "PredAllocationList" : [ "Allocation1" ],
     "ResourceRequirementList" : [ "Line1" ]
-  }, {
-    "ID" : "Allocation3",
-    "PID" : "163",
-    "JID" : "SINK",
-    "StartDate" : "2025-02-02 01:00:00",
-    "EndDate" : "2025-02-02 01:00:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ "Allocation2" ],
-    "ResourceRequirementList" : [ ]
-  }, {
-    "ID" : "Allocation4",
-    "PID" : "164",
-    "JID" : "SOURCE",
-    "StartDate" : "2025-02-02 00:04:00",
-    "EndDate" : "2025-02-02 00:04:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ ],
-    "ResourceRequirementList" : [ ]
   }, {
     "ID" : "Allocation5",
     "PID" : "164",
@@ -51,24 +24,6 @@
     "PredAllocationList" : [ "Allocation4" ],
     "ResourceRequirementList" : [ "Line2" ]
   }, {
-    "ID" : "Allocation6",
-    "PID" : "164",
-    "JID" : "SINK",
-    "StartDate" : "2025-02-02 01:14:00",
-    "EndDate" : "2025-02-02 01:14:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ "Allocation5" ],
-    "ResourceRequirementList" : [ ]
-  }, {
-    "ID" : "Allocation7",
-    "PID" : "165",
-    "JID" : "SOURCE",
-    "StartDate" : "2025-02-02 00:08:00",
-    "EndDate" : "2025-02-02 00:08:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ ],
-    "ResourceRequirementList" : [ ]
-  }, {
     "ID" : "Allocation8",
     "PID" : "165",
     "JID" : "Job1",
@@ -77,14 +32,35 @@
     "Duration" : 60,
     "PredAllocationList" : [ "Allocation7" ],
     "ResourceRequirementList" : [ "Line1" ]
+  } ],
+  "IndicmentsList" : [ {
+    "Allocation" : "120",
+    "MatchCount" : "1",
+    "Constraint" : "Total makespan",
+    "Penalty" : "0hard/0medium/-120soft"
   }, {
-    "ID" : "Allocation9",
-    "PID" : "165",
-    "JID" : "SINK",
-    "StartDate" : "2025-02-02 02:00:00",
-    "EndDate" : "2025-02-02 02:00:00",
-    "Duration" : 0,
-    "PredAllocationList" : [ "Allocation8" ],
-    "ResourceRequirementList" : [ ]
-  } ]
+    "Allocation" : "Allocation-2",
+    "MatchCount" : "1",
+    "Constraint" : "Total project delay",
+    "Penalty" : "0hard/-60medium/0soft"
+  }, {
+    "Allocation" : "Allocation-5",
+    "MatchCount" : "1",
+    "Constraint" : "Total project delay",
+    "Penalty" : "0hard/-74medium/0soft"
+  }, {
+    "Allocation" : "Allocation-8",
+    "MatchCount" : "1",
+    "Constraint" : "Total project delay",
+    "Penalty" : "0hard/-120medium/0soft"
+  } ],
+  "TotalMatch" : {
+    "initScore" : 0,
+    "hardScore" : 0,
+    "mediumScore" : -254,
+    "softScore" : -120,
+    "feasible" : true,
+    "zero" : false,
+    "solutionInitialized" : true
+  }
 }
