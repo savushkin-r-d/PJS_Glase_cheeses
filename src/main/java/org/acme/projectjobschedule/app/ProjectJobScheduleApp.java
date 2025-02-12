@@ -59,7 +59,6 @@ public class ProjectJobScheduleApp {
         DataModel model = new DataModel(filePath);
         model.readOperationHashMap();
         ProjectJobSchedule problem = model.generateProjectJobSchedule();
-        int temination;
         SolverFactory<ProjectJobSchedule> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ProjectJobSchedule.class)
                 .withEntityClasses(Allocation.class)
@@ -69,10 +68,6 @@ public class ProjectJobScheduleApp {
                 .withTerminationConfig(new TerminationConfig()
                         .withSpentLimit(Duration.ofSeconds(model.getTS())) // Максимум 5 минут
                         .withUnimprovedSpentLimit(Duration.ofSeconds(model.getUS())))); // Или 1 минута без улучшений
-
-        // Load the problem
-        //DemoDataGenerator demo_data = new DemoDataGenerator();
-       // ProjectJobSchedule problem1 = demo_data.generateDemoData();
 
         // Solve the problem
         Solver<ProjectJobSchedule> solver = solverFactory.buildSolver();
@@ -87,7 +82,6 @@ public class ProjectJobScheduleApp {
 
         List<Allocation> allocations = solution.getAllocations();
         int hardScore = score.hardScore();
-        // Вывод или обработка данных
 
         JsonExporter exporter = new JsonExporter(score, model.getID(),model.getStartDate(),
                 problem.getProjects(), problem.getResources(),problem.getResourceRequirements(),
