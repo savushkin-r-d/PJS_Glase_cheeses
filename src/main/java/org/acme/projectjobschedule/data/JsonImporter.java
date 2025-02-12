@@ -1,6 +1,8 @@
 package org.acme.projectjobschedule.data;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonImporter {
+
     protected String filepath;
     protected Map<String, Object> jsonMap;
 
@@ -17,7 +20,7 @@ public class JsonImporter {
         this.filepath = filepath;
     }
 
-public  Map<String, Object> getJsonMap(){
+    public  Map<String, Object> getJsonMap(){
         return jsonMap;
 }
     public String getFilepath(){
@@ -28,7 +31,7 @@ public  Map<String, Object> getJsonMap(){
         this.filepath = filepath;
     }
 
- public void printOperationHashMap(){
+    public void printOperationHashMap(){
     System.out.println(jsonMap);
 }
 

@@ -34,11 +34,6 @@
     "ResourceRequirementList" : [ "Line1" ]
   } ],
   "IndicmentsList" : [ {
-    "Allocation" : "120",
-    "MatchCount" : "1",
-    "Constraint" : "Total makespan",
-    "Penalty" : "0hard/0medium/-120soft"
-  }, {
     "Allocation" : "Allocation-2",
     "MatchCount" : "1",
     "Constraint" : "Total project delay",
@@ -53,6 +48,11 @@
     "MatchCount" : "1",
     "Constraint" : "Total project delay",
     "Penalty" : "0hard/-120medium/0soft"
+  }, {
+    "Allocation" : "120",
+    "MatchCount" : "1",
+    "Constraint" : "Total makespan",
+    "Penalty" : "0hard/0medium/-120soft"
   } ],
   "TotalMatch" : {
     "initScore" : 0,

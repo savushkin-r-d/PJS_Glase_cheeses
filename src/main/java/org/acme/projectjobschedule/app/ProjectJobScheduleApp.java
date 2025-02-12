@@ -1,22 +1,30 @@
 package org.acme.projectjobschedule.app;
 
-import ai.timefold.solver.core.api.score.ScoreExplanation;
-import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
-import ai.timefold.solver.core.api.solver.SolutionManager;
-import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
-import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
-import ai.timefold.solver.core.api.solver.SolverFactory;
-import ai.timefold.solver.core.api.solver.Solver;
-import ai.timefold.solver.core.config.solver.SolverConfig;
-import ai.timefold.solver.core.config.solver.termination.TerminationConfig;
+import java.util.List;
+
+import java.io.*;
+
+import java.time.Duration;
+
+import org.acme.projectjobschedule.data.*;
 import org.acme.projectjobschedule.domain.*;
-import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.Duration;
-import org.acme.projectjobschedule.data.*;
-import java.util.List;
-import java.io.*;
+
+import ai.timefold.solver.core.api.score.ScoreExplanation;
+import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
+import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
+
+import org.acme.projectjobschedule.solver.ProjectJobSchedulingConstraintProvider;
+
+import ai.timefold.solver.core.api.solver.SolutionManager;
+import ai.timefold.solver.core.api.solver.SolverFactory;
+import ai.timefold.solver.core.api.solver.Solver;
+
+import ai.timefold.solver.core.config.solver.SolverConfig;
+import ai.timefold.solver.core.config.solver.termination.TerminationConfig;
 
 public class ProjectJobScheduleApp {
 

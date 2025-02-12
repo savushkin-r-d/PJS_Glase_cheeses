@@ -1,27 +1,32 @@
 package org.acme.projectjobschedule.data;
 
-import ai.timefold.solver.core.api.score.ScoreExplanation;
-import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
-import ai.timefold.solver.core.api.score.constraint.ConstraintMatch;
-import ai.timefold.solver.core.api.score.constraint.Indictment;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.Resource;
+
+import ai.timefold.solver.core.api.score.ScoreExplanation;
+import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.constraint.ConstraintMatch;
+import ai.timefold.solver.core.api.score.constraint.Indictment;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class JsonExporter {
 
-    private Map<String, Object> jsonMap;
+    private final Map<String, Object> jsonMap;
     private HardMediumSoftScore totalScore;
 
     public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, List<Project> projects, List<Resource> resources,
@@ -31,7 +36,7 @@ public class JsonExporter {
         List<String> projectsPid = getProjectsPid(projects);
         List<String> resourcesRid = getResourcesRid(resources);
         List<JsonAllocationList> jallocationList = getJallocationList(allocations, StartDate, requirementList);
-        List<ResultAnalyze> jIndicments = getIndicments(scoreExplanation);
+        List<ResultAnalyze> Indicments = getIndicments(scoreExplanation);
         this.jsonMap = new LinkedHashMap<>();
 
         jsonMap.put("ID", ID);
@@ -41,7 +46,7 @@ public class JsonExporter {
         jsonMap.put("Projects", projectsPid);
         jsonMap.put("Resources", resourcesRid);
         jsonMap.put("AllocationList", jallocationList);
-        jsonMap.put("IndicmentsList", jIndicments);
+        jsonMap.put("IndicmentsList", Indicments);
         jsonMap.put("TotalMatch", totalScore);
     }
 
@@ -66,7 +71,7 @@ public class JsonExporter {
     private List<String> getProjectsPid(List<Project> projects){
         List<String> projectsPid = new ArrayList<>();
         for (Project project : projects) {
-            String originalPID = project.getPID(); // Короткая строка
+            String originalPID = project.getPID();
             String trimmedPID = (originalPID.length() > 4)
                     ? originalPID.substring(4)
                     : originalPID;
@@ -120,14 +125,14 @@ public class JsonExporter {
 
         // Формат даты и времени
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        private String id;
-        private String pid;
-        private String jid;
-        private String startDate;
-        private String endDate;
-        private int duration;
-        private List<String> resourceRequirementList;
-        private List<String> predAllocationList;
+        private final String id;
+        private final String pid;
+        private final String jid;
+        private final String startDate;
+        private final String endDate;
+        private final int duration;
+        private final List<String> resourceRequirementList;
+        private final List<String> predAllocationList;
 
         // Геттеры
         @JsonProperty("ID")
@@ -174,7 +179,7 @@ public class JsonExporter {
                               int duration, List<ResourceRequirement> requirementsList,
                               ExecutionMode executionMode,
                               List<Allocation> predAllocationlist){
-            int numericId = Integer.valueOf(id) + 1;
+            int numericId = Integer.parseInt(id) + 1;
             this.id = "Allocation" + numericId;
             this.pid = (pid.length() > 4)
                     ? pid.substring(4)
@@ -191,43 +196,39 @@ public class JsonExporter {
                }
             }
             for(Allocation predAllocation : predAllocationlist){
-                int numericAllocId = Integer.valueOf(predAllocation.getId()) + 1;
+                int numericAllocId = Integer.parseInt(predAllocation.getId()) + 1;
                 predAllocationList.add("Allocation" + numericAllocId );
 }
         }
     }
-    @JsonPropertyOrder({ "Allocation", "MatchCount", "Constraint", "Penalty" })
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    static class ResultAnalyze{
 
-        private String allocationNum;
-        private String constraintName;
-        private String penaltyScore;
-        private String matchCount;
+    @JsonPropertyOrder({"Allocation", "MatchCount", "Constraint", "Penalty"})
+        @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    record ResultAnalyze(String allocationNum, String matchCount, String constraintName, String penaltyScore) {
 
-        @JsonProperty("Allocation")
-        public String getAllocationNum() {
-            return allocationNum;
-        }
+            @Override
+            @JsonProperty("Allocation")
+            public String allocationNum() {
+                return allocationNum;
+            }
 
-        @JsonProperty("MatchCount")
-        public String getMatchCount() {
-            return matchCount;
-        }
+            @Override
+            @JsonProperty("MatchCount")
+            public String matchCount() {
+                return matchCount;
+            }
+
+        @Override
         @JsonProperty("Constraint")
-        public String getConstraintName() {
-            return constraintName;
-        }
-        @JsonProperty("Penalty")
-        public String getPenaltyScore() {
-            return penaltyScore;
-        }
+            public String constraintName() {
+                return constraintName;
+            }
 
-        public ResultAnalyze(String  allocationNum, String matchCount, String constraintName,String penaltyScore){
-            this.allocationNum = allocationNum;
-            this.matchCount = matchCount;
-            this.constraintName = constraintName;
-            this.penaltyScore = penaltyScore;
-        }
+        @Override
+        @JsonProperty("Penalty")
+            public String penaltyScore() {
+                return penaltyScore;
+            }
+
     }
 }
