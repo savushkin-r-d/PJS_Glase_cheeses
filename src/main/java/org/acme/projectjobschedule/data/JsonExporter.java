@@ -3,10 +3,7 @@ package org.acme.projectjobschedule.data;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import org.acme.projectjobschedule.domain.*;
 import org.acme.projectjobschedule.domain.resource.Resource;
@@ -20,11 +17,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class JsonExporter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonExporter.class);
 
     private final Map<String, Object> jsonMap;
     private HardMediumSoftScore totalScore;
@@ -32,11 +33,10 @@ public class JsonExporter {
     public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, List<Project> projects, List<Resource> resources,
                         List<ResourceRequirement> requirementList, List<Allocation> allocations, ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation) {
 
-        int hardScore = score.hardScore();
         List<String> projectsPid = getProjectsPid(projects);
         List<String> resourcesRid = getResourcesRid(resources);
         List<JsonAllocationList> jallocationList = getJallocationList(allocations, StartDate, requirementList);
-        List<ResultAnalyze> Indicments = getIndicments(scoreExplanation);
+        List<ResultAnalyze> Indicments = getIndicmentList(scoreExplanation);
         this.jsonMap = new LinkedHashMap<>();
 
         jsonMap.put("ID", ID);
@@ -57,7 +57,7 @@ public class JsonExporter {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), jsonMap);
             System.out.println("JSON файл успешно создан: " + filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Exception :: ", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class JsonExporter {
         return jallocationList;
     }
 
-    private List<ResultAnalyze> getIndicments(ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation) {
+    private List<ResultAnalyze> getIndicmentList(ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation) {
 
         Map<Object, Indictment<HardMediumSoftScore>> indictmentMap = scoreExplanation.getIndictmentMap();
         List<ResultAnalyze> indicmentsList = new ArrayList<>();
@@ -115,6 +115,7 @@ public class JsonExporter {
                         String.valueOf(constraintMatch.getScore())));
             }
         }
+        indicmentsList.sort(Comparator.comparing(ResultAnalyze::allocationNum));
         return indicmentsList;
     }
 
@@ -185,8 +186,8 @@ public class JsonExporter {
                     ? pid.substring(4)
                     : pid;
             this.jid = jid;
-            this.startDate = String.valueOf(startDate.plusMinutes(allocStartDate).format(formatter));
-            this.endDate = String.valueOf(startDate.plusMinutes(allocStartDate + duration).format(formatter));
+            this.startDate = startDate.plusMinutes(allocStartDate).format(formatter);
+            this.endDate = startDate.plusMinutes(allocStartDate + duration).format(formatter);
             this.duration = duration;
             this.resourceRequirementList = new ArrayList<>();
             this.predAllocationList = new ArrayList<>();

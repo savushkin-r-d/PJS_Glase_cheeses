@@ -10,8 +10,13 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JsonImporter {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonImporter.class);
 
     protected String filepath;
     protected Map<String, Object> jsonMap;
@@ -19,21 +24,6 @@ public class JsonImporter {
     public JsonImporter(String filepath){
         this.filepath = filepath;
     }
-
-    public  Map<String, Object> getJsonMap(){
-        return jsonMap;
-}
-    public String getFilepath(){
-        return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
-    }
-
-    public void printOperationHashMap(){
-    System.out.println(jsonMap);
-}
 
     public void readOperationHashMap() {
         try {
@@ -112,7 +102,7 @@ public class JsonImporter {
             jsonMap.put("ProjectList", projectList);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Exception :: ", e);
         }
     }
 

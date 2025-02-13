@@ -48,6 +48,12 @@
         <artifactId>jackson-databind</artifactId>
         <version>2.13.3</version>
     </dependency>
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.24.2</version>
+        <scope>test</scope>
+    </dependency>
 </dependencies>
 </dependencyManagement>
 
@@ -89,6 +95,12 @@
         <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>org.skyscreamer</groupId>
+        <artifactId>jsonassert</artifactId>
+        <version>1.5.1</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
         <scope>test</scope>
@@ -99,9 +111,8 @@
         <version>${version.org.assertj}</version>
         <scope>test</scope>
     </dependency>
-
-
 </dependencies>
+
 <build>
 <plugins>
     <plugin>
