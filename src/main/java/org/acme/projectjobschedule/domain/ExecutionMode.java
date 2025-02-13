@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = ExecutionMode.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ExecutionMode {
-
+    
+    private  String JID;
     @PlanningId
     private String id;
     private Job job;
@@ -34,6 +35,10 @@ public class ExecutionMode {
         this(id, job, duration);
         this.resourceRequirements = resourceRequirements;
     }
+
+    public  String getJID(){ return JID; }
+
+    public void setJID(String JID){ this.JID = JID; }
 
     public String getId() {
         return id;

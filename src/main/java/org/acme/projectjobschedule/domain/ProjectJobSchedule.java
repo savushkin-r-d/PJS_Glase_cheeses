@@ -43,8 +43,8 @@ public class ProjectJobSchedule {
 
     @JsonCreator
     public ProjectJobSchedule(@JsonProperty("projects") List<Project> projects,
-            @JsonProperty("resources") List<Resource> resources,
-            @JsonProperty("jobs") List<Job> jobs, @JsonProperty("allocations") List<Allocation> allocations) {
+                              @JsonProperty("resources") List<Resource> resources,
+                              @JsonProperty("jobs") List<Job> jobs, @JsonProperty("allocations") List<Allocation> allocations) {
         this.projects = projects;
         this.resources = resources;
         this.jobs = jobs;

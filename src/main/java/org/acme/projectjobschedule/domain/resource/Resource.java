@@ -16,9 +16,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(scope = Resource.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public abstract class Resource {
-
+   private String RID;
     private String id;
     private int capacity;
+    private boolean renewable;
 
     protected Resource() {
     }
@@ -39,7 +40,12 @@ public abstract class Resource {
     public void setId(String id) {
         this.id = id;
     }
-
+public String getRID(){
+        return RID;
+}
+public  void setRID(String RID){
+        this.RID = RID;
+}
     public int getCapacity() {
         return capacity;
     }

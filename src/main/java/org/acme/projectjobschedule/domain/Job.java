@@ -9,10 +9,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = Job.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Job {
-
+    private String JID;
     private String id;
     private Project project;
     private JobType jobType;
+    private int duration;
     private List<ExecutionMode> executionModes;
     @JsonIdentityReference(alwaysAsId = true)
     private List<Job> successorJobs;
@@ -30,6 +31,17 @@ public class Job {
         this.jobType = jobType;
     }
 
+    public Job(String id, Project project, JobType jobType, String jid) {
+        this(id);
+        this.project = project;
+        this.jobType = jobType;
+        this.JID = jid;
+    }
+
+    public String getJID(){ return JID; }
+
+    public void setJID(String JID){ this.JID = JID; }
+
     public String getId() {
         return id;
     }
@@ -41,6 +53,7 @@ public class Job {
     public Project getProject() {
         return project;
     }
+    public int getDuration(){ return duration;}
 
     public void setProject(Project project) {
         this.project = project;
