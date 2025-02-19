@@ -17,15 +17,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class JsonExporter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonExporter.class);
 
     private final Map<String, Object> jsonMap;
     private HardMediumSoftScore totalScore;
@@ -57,7 +53,7 @@ public class JsonExporter {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), jsonMap);
             System.out.println("JSON файл успешно создан: " + filePath);
         } catch (IOException e) {
-            LOGGER.error("Exception :: ", e);
+            System.err.println("Ошибка при создании JSON файла:" + e.getMessage());
         }
     }
 
