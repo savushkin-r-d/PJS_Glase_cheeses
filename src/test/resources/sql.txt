@@ -1,0 +1,13 @@
+COPY customer FROM '/home/data/customer.csv' DELIMITER ',' CSV HEADER;
+CREATE TABLE executions(
+EAN13 VARCHAR(13) PRIMARY KEY,
+Линия_1 INTEGER,
+Линия_2 INTEGER,
+Линия_3 INTEGER,
+Линия_4 INTEGER,
+Линия_5 INTEGER,
+Линия_6 INTEGER,
+Товар TEXT
+);
+COPY executions FROM '/Users/yana/Documents/Планировщик/PJS_Glase_cheeses/src/test/resources/ExecutionModes.csv' DELIMITER ',' CSV HEADER;
+.import /Users/yana/Documents/Планировщик/PJS_Glase_cheeses/src/test/resources/ExecutionModes.csv executions

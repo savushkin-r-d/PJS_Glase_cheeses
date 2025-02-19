@@ -1,0 +1,266 @@
+{
+  "ID": "P1570C30",
+  "StartDate": "2025-02-08 00:00:00",
+  "EndDate": "2025-02-08 23:59:59",
+  "Termination": "TS180;US10",
+  "ResourceList": [
+    {
+      "RID": "Line1",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    },
+    {
+      "RID": "Line2",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    },
+    {
+      "RID": "Line3",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    },
+    {
+      "RID": "Line4",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    },
+    {
+      "RID": "Line5",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    },
+    {
+      "RID": "Line6",
+      "Capacity": 1,
+      "@type": "global",
+      "Renewable": true,
+      "RestrictionList": []
+    }
+  ],
+  "JobList": [
+    {
+      "JID": "SOURCE",
+      "SuccessorList": ["Packaging"]
+    },
+    {
+      "JID": "Packaging",
+      "SuccessorList": ["SINK"]
+    },
+    {
+      "JID": "SINK",
+      "SuccessorList": []
+    }
+  ],
+  "ProjectList": [
+    {
+      "PID": "307060046",
+      "Priority": 1,
+      "VB": 133,
+      "GTIN": "4810268043727",
+      "NP": 142,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 17,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 17,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line2",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 17,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 16,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 16,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 16,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+
+    {
+      "PID": "307060123",
+      "Priority": 0,
+      "VB": 168,
+      "GTIN": "4810268050282",
+      "NP": 88,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+
+
+    {
+      "PID": "165983",
+      "Priority": 0,
+      "VB": 147,
+      "GTIN": "4810268044984",
+      "NP": 121,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 21,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "307060148",
+      "Priority": 0,
+      "VB": 234,
+      "GTIN": "4810268056826",
+      "NP": 21,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 25,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "Packaging",
+          "Duration": 25,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    }
+  ]
+}
+
