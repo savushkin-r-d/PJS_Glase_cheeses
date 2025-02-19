@@ -68,7 +68,7 @@
       "PID": "165919",
       "Priority": 1,
       "VB": 133,
-      "GTIN": "01234567890123",
+      "GTIN": "4810300000000",
       "NP": 142,
       "ExecutionModeList": [
         {
@@ -117,7 +117,7 @@
           ]
         },
         {
-          "JID": "142Line5",
+          "JID": "142,Line5",
           "Duration": 16,
           "ResourceRequirementList": [
             {
@@ -143,12 +143,330 @@
         }
       ]
     },
+    {
+      "PID": "165960",
+      "Priority": 1,
+      "VB": 227,
+      "GTIN": "4810300000000",
+      "NP": 183,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "183,Line1",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "183,Line2",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line2",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "183,Line3",
+          "Duration": 28,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "183,Line4",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "183,Line5",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "183,Line6",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "165961",
+      "Priority": 1,
+      "VB": 227,
+      "GTIN": "4810300000000",
+      "NP": 184,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "184,Line1",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "184,Line2",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line2",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "184,Line3",
+          "Duration": 28,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "184,Line4",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "184,Line5",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "184,Line6",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
 
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "166003",
+      "Priority": 1,
+      "VB": 227,
+      "GTIN": "4810300000000",
+      "NP": 94,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "94,Line1",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "94,Line2",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line2",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "94,Line3",
+          "Duration": 28,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "94,Line4",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "94,Line5",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "94,Line6",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "166004",
+      "Priority": 1,
+      "VB": 227,
+      "GTIN": "4810300000000",
+      "NP": 95,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "95,Line1",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line1",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "95,Line2",
+          "Duration": 29,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line2",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "95,Line3",
+          "Duration": 28,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line3",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "95,Line4",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "95,Line5",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "95,Line6",
+          "Duration": 26,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
     {
       "PID": "166072",
       "Priority": 0,
       "VB": 168,
-      "GTIN": "01234567890123",
+      "GTIN": "4810300000000",
       "NP": 88,
       "ExecutionModeList": [
         {
@@ -157,7 +475,7 @@
           "ResourceRequirementList": []
         },
         {
-          "JID": "168,Line4",
+          "JID": "88,Line4",
           "Duration": 60,
           "ResourceRequirementList": [
             {
@@ -167,7 +485,7 @@
           ]
         },
         {
-          "JID": "168,Line5",
+          "JID": "88,Line5",
           "Duration": 60,
           "ResourceRequirementList": [
             {
@@ -177,8 +495,106 @@
           ]
         },
         {
-          "JID": "168,Line6",
+          "JID": "88,Line6",
           "Duration": 60,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "166097",
+      "Priority": 0,
+      "VB": 168,
+      "GTIN": "4810300000000",
+      "NP": 30,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "30,Line4",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "30,Line5",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "30,Line6",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "SINK",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        }
+      ]
+    },
+    {
+      "PID": "166072",
+      "Priority": 0,
+      "VB": 168,
+      "GTIN": "4810300000000",
+      "NP": 88,
+      "ExecutionModeList": [
+        {
+          "JID": "SOURCE",
+          "Duration": 0,
+          "ResourceRequirementList": []
+        },
+        {
+          "JID": "88,Line4",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line4",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "88,Line5",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "88,Line6",
+          "Duration": 22,
           "ResourceRequirementList": [
             {
               "RID": "Line6",
@@ -197,7 +613,7 @@
       "PID": "165983",
       "Priority": 0,
       "VB": 147,
-      "GTIN": "01234567890123",
+      "GTIN": "4810300000000",
       "NP": 121,
       "ExecutionModeList": [
         {
@@ -206,8 +622,8 @@
           "ResourceRequirementList": []
         },
         {
-          "JID": "147,Line1",
-          "Duration": 60,
+          "JID": "121,Line1",
+          "Duration": 21,
           "ResourceRequirementList": [
             {
               "RID": "Line1",
@@ -226,7 +642,7 @@
       "PID": "166349",
       "Priority": 0,
       "VB": 234,
-      "GTIN": "01234567890123",
+      "GTIN": "4810300000000",
       "NP": 21,
       "ExecutionModeList": [
         {
@@ -235,21 +651,31 @@
           "ResourceRequirementList": []
         },
         {
-          "JID": "21,Line3",
-          "Duration": 60,
+          "JID": "21,Line4",
+          "Duration": 22,
           "ResourceRequirementList": [
             {
-              "RID": "Line3",
+              "RID": "Line4",
               "Requirement": 1
             }
           ]
         },
         {
-          "JID": "231,Line5",
-          "Duration": 60,
+          "JID": "21,Line5",
+          "Duration": 22,
           "ResourceRequirementList": [
             {
               "RID": "Line5",
+              "Requirement": 1
+            }
+          ]
+        },
+        {
+          "JID": "21,Line6",
+          "Duration": 22,
+          "ResourceRequirementList": [
+            {
+              "RID": "Line6",
               "Requirement": 1
             }
           ]
