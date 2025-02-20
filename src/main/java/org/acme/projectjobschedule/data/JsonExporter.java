@@ -29,7 +29,7 @@ public class JsonExporter {
     public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, List<Project> projects, List<Resource> resources,
                         List<ResourceRequirement> requirementList, List<Allocation> allocations, ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation) {
 
-        List<String> projectsPid = getProjectsPid(projects);
+        List<String> projectsNP= getProjectsNP(projects);
         List<String> resourcesRid = getResourcesRid(resources);
         List<JsonAllocationList> jallocationList = getJallocationList(allocations, StartDate, requirementList);
         List<ResultAnalyze> Indicments = getIndicmentList(scoreExplanation);
@@ -39,7 +39,7 @@ public class JsonExporter {
         jsonMap.put("HardConstraintsPenalty", score.hardScore());
         jsonMap.put("MediumConstraintsPenalty1", score.mediumScore());
         jsonMap.put("SoftConstraintsPenalty", score.softScore());
-        jsonMap.put("Projects", projectsPid);
+        jsonMap.put("Projects", projectsNP);
         jsonMap.put("Resources", resourcesRid);
         jsonMap.put("AllocationList", jallocationList);
         jsonMap.put("IndicmentsList", Indicments);
@@ -64,12 +64,12 @@ public class JsonExporter {
         }
          return resourcesRid;
     }
-    private List<String> getProjectsPid(List<Project> projects){
-        List<String> projectsPid = new ArrayList<>();
+    private List<String> getProjectsNP(List<Project> projects){
+        List<String> projectsNP = new ArrayList<>();
         for (Project project : projects) {
-            projectsPid.add(project.getPID());
+            projectsNP.add(String.valueOf(project.getNp()));
         }
-        return projectsPid;
+        return projectsNP;
     }
 
     private List<JsonAllocationList> getJallocationList(List<Allocation> allocations, LocalDateTime StartDate,
