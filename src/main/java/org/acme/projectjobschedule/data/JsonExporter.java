@@ -17,15 +17,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class JsonExporter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonExporter.class);
 
     private final Map<String, Object> jsonMap;
     private HardMediumSoftScore totalScore;
@@ -33,7 +29,7 @@ public class JsonExporter {
     public JsonExporter(HardMediumSoftScore score, String ID, LocalDateTime StartDate, List<Project> projects, List<Resource> resources,
                         List<ResourceRequirement> requirementList, List<Allocation> allocations, ScoreExplanation<ProjectJobSchedule, HardMediumSoftScore> scoreExplanation) {
 
-        List<String> projectsPid = getProjectsPid(projects);
+        List<String> projectsNP= getProjectsNP(projects);
         List<String> resourcesRid = getResourcesRid(resources);
         List<JsonAllocationList> jallocationList = getJallocationList(allocations, StartDate, requirementList);
         List<ResultAnalyze> Indicments = getIndicmentList(scoreExplanation);
@@ -43,7 +39,7 @@ public class JsonExporter {
         jsonMap.put("HardConstraintsPenalty", score.hardScore());
         jsonMap.put("MediumConstraintsPenalty1", score.mediumScore());
         jsonMap.put("SoftConstraintsPenalty", score.softScore());
-        jsonMap.put("Projects", projectsPid);
+        jsonMap.put("Projects", projectsNP);
         jsonMap.put("Resources", resourcesRid);
         jsonMap.put("AllocationList", jallocationList);
         jsonMap.put("IndicmentsList", Indicments);
@@ -57,7 +53,7 @@ public class JsonExporter {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), jsonMap);
             System.out.println("JSON файл успешно создан: " + filePath);
         } catch (IOException e) {
-            LOGGER.error("Exception :: ", e);
+            System.err.println("Ошибка при создании JSON файла:" + e.getMessage());
         }
     }
 
@@ -68,16 +64,12 @@ public class JsonExporter {
         }
          return resourcesRid;
     }
-    private List<String> getProjectsPid(List<Project> projects){
-        List<String> projectsPid = new ArrayList<>();
+    private List<String> getProjectsNP(List<Project> projects){
+        List<String> projectsNP = new ArrayList<>();
         for (Project project : projects) {
-            String originalPID = project.getPID();
-            String trimmedPID = (originalPID.length() > 4)
-                    ? originalPID.substring(4)
-                    : originalPID;
-            projectsPid.add(trimmedPID);
+            projectsNP.add(String.valueOf(project.getNp()));
         }
-        return projectsPid;
+        return projectsNP;
     }
 
     private List<JsonAllocationList> getJallocationList(List<Allocation> allocations, LocalDateTime StartDate,
@@ -88,7 +80,7 @@ public class JsonExporter {
                 continue;
             }
             JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getPID(),
-                    allocation.getJob().getJID(), StartDate, allocation.getStartDate(), allocation.getExecutionMode().getDuration(), requirementList,
+                    allocation.getExecutionMode().getJID(), StartDate, allocation.getStartDate(), allocation.getExecutionMode().getDuration(), requirementList,
                     allocation.getExecutionMode(), allocation.getPredecessorAllocations());
             jallocationList.add(jallocation);
         }
@@ -182,9 +174,7 @@ public class JsonExporter {
                               List<Allocation> predAllocationlist){
             int numericId = Integer.parseInt(id) + 1;
             this.id = "Allocation" + numericId;
-            this.pid = (pid.length() > 4)
-                    ? pid.substring(4)
-                    : pid;
+            this.pid = pid;
             this.jid = jid;
             this.startDate = startDate.plusMinutes(allocStartDate).format(formatter);
             this.endDate = startDate.plusMinutes(allocStartDate + duration).format(formatter);
