@@ -67,11 +67,7 @@ public class JsonExporter {
     private List<String> getProjectsPid(List<Project> projects){
         List<String> projectsPid = new ArrayList<>();
         for (Project project : projects) {
-            String originalPID = project.getPID();
-            String trimmedPID = (originalPID.length() > 4)
-                    ? originalPID.substring(4)
-                    : originalPID;
-            projectsPid.add(trimmedPID);
+            projectsPid.add(project.getPID());
         }
         return projectsPid;
     }
@@ -84,7 +80,7 @@ public class JsonExporter {
                 continue;
             }
             JsonAllocationList jallocation = new JsonAllocationList(allocation.getId(), allocation.getProject().getPID(),
-                    allocation.getJob().getJID(), StartDate, allocation.getStartDate(), allocation.getExecutionMode().getDuration(), requirementList,
+                    allocation.getExecutionMode().getJID(), StartDate, allocation.getStartDate(), allocation.getExecutionMode().getDuration(), requirementList,
                     allocation.getExecutionMode(), allocation.getPredecessorAllocations());
             jallocationList.add(jallocation);
         }
@@ -178,9 +174,7 @@ public class JsonExporter {
                               List<Allocation> predAllocationlist){
             int numericId = Integer.parseInt(id) + 1;
             this.id = "Allocation" + numericId;
-            this.pid = (pid.length() > 4)
-                    ? pid.substring(4)
-                    : pid;
+            this.pid = pid;
             this.jid = jid;
             this.startDate = startDate.plusMinutes(allocStartDate).format(formatter);
             this.endDate = startDate.plusMinutes(allocStartDate + duration).format(formatter);

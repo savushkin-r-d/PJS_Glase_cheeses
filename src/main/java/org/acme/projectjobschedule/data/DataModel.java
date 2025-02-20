@@ -271,7 +271,6 @@ public class DataModel extends JsonImporter {
                     if(job.getJobType().equals(SINK) && job.getProject().getId().equals(id)){
                         for(ExecutionMode executionMode : executionModeSink){
                             executionMode.setJob(job);
-                            job.setJID(executionMode.getJID());
                         }
                         job.setExecutionModes(executionModeSink);
 
@@ -279,7 +278,6 @@ public class DataModel extends JsonImporter {
                     else if(job.getJobType().equals(SOURCE) && job.getProject().getId().equals(id)){
                         for(ExecutionMode executionMode : executionModeSource){
                             executionMode.setJob(job);
-                            job.setJID(executionMode.getJID());
                         }
                         job.setExecutionModes(executionModeSource);
                     }
@@ -287,7 +285,6 @@ public class DataModel extends JsonImporter {
                         job.setJobType(STANDARD);
                         for(ExecutionMode executionMode : executionModeStandard){
                             executionMode.setJob(job);
-                            job.setJID(executionMode.getJID());
                         }
                         job.setExecutionModes(executionModeStandard);
                     }
