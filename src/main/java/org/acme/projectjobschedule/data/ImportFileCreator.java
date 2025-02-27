@@ -3,7 +3,9 @@ package org.acme.projectjobschedule.data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.acme.projectjobschedule.domain.ResourceRequirement;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ImportFileCreator {
@@ -94,6 +96,39 @@ public class ImportFileCreator {
                     "Сырок тв. глаз. \"ТОП АПЕЛЬСИН\" с кусочками цветной глазури с ароматом апельсина мдж 20 % ФЛОУПАК 35 г"
             )
             ) ;
+
+    @JsonPropertyOrder({"PID", "Priority", "VB", "Line3", "GTIN", "NP", "Line6", "ProductName"})
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    static class ProjectListCreator {
+
+        private int pid;
+        private String priority;
+        private String vb;
+        private String gtin;
+        private int np;
+        private List<ExecutionModeList> executionModeList;
+
+        public ProjectListCreator(String priority,String vb, String gtin, int np, List<ExecutionModeList> executionModeList){
+            this.pid = np;
+            this.priority = priority;
+            this.vb = vb;
+            this.gtin = gtin;
+            this.np = np;
+            this.executionModeList = executionModeList;
+        }
+
+    }
+
+    static class ExecutionModeList{
+        private String jid;
+        private int duration;
+        private List<ResourceRequirementList> resourceRequirementListList;
+    }
+
+    static class ResourceRequirementList{
+        private String rid;
+        private String requirement;
+    }
 
     @JsonPropertyOrder({"EAN13", "Line1", "Line2", "Line3", "Line4", "Line5", "Line6", "ProductName"})
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
