@@ -95,7 +95,7 @@ public class ImportFileCreator {
             )
             ) ;
 
-    @JsonPropertyOrder({"Allocation", "MatchCount", "Constraint", "Penalty"})
+    @JsonPropertyOrder({"EAN13", "Line1", "Line2", "Line3", "Line4", "Line5", "Line6", "ProductName"})
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     record ExecutionModeRecord(String ean13, int line1, int line2, int line3,int line4, int line5, int line6, String productName) {
 
