@@ -51,7 +51,7 @@
   "JobList": [
     {
       "JID": "SOURCE",
-      "SuccessorList": ["Job1"]
+      "SuccessorList": ["Packaging"]
     },
     {
       "JID": "Packaging",

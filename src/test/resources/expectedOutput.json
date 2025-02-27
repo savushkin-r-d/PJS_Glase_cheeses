@@ -3,12 +3,12 @@
   "HardConstraintsPenalty" : 0,
   "MediumConstraintsPenalty1" : -12,
   "SoftConstraintsPenalty" : -8,
-  "Projects" : [ "163", "164", "165" ],
+  "Projects" : [ "261", "262", "263" ],
   "Resources" : [ "Line1", "Line2" ],
   "AllocationList" : [ {
     "ID" : "Allocation2",
-    "PID" : "163",
-    "JID" : "Job1",
+    "PID" : "261",
+    "JID" : "261,Line1",
     "StartDate" : "2025-02-02 00:00:00",
     "EndDate" : "2025-02-02 01:00:00",
     "Duration" : 60,
@@ -16,8 +16,8 @@
     "ResourceRequirementList" : [ "Line1" ]
   }, {
     "ID" : "Allocation5",
-    "PID" : "164",
-    "JID" : "Job1",
+    "PID" : "262",
+    "JID" : "262,Line2",
     "StartDate" : "2025-02-02 00:04:00",
     "EndDate" : "2025-02-02 01:14:00",
     "Duration" : 70,
@@ -25,8 +25,8 @@
     "ResourceRequirementList" : [ "Line2" ]
   }, {
     "ID" : "Allocation8",
-    "PID" : "165",
-    "JID" : "Job1",
+    "PID" : "263",
+    "JID" : "263,Line1",
     "StartDate" : "2025-02-02 01:00:00",
     "EndDate" : "2025-02-02 02:00:00",
     "Duration" : 60,
