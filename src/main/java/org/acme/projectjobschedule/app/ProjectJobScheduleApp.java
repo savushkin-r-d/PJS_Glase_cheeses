@@ -63,7 +63,7 @@ public class ProjectJobScheduleApp {
                     allocations, scoreExplanation);
             exporter.convertToJsonFile("src/main/resources/exportData.json");
 
-            ImportExecutionModesTable dbTable = new ImportExecutionModesTable();
+
         }
 
         else {
