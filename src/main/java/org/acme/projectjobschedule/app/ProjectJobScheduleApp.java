@@ -31,7 +31,7 @@ public class ProjectJobScheduleApp {
 
         // Load the problem from JSON
         String filePath = "src/main/resources/exampleData.json"; // Путь к файлу JSON
-
+        ImportFileCreator fileCreator = new ImportFileCreator();
         File importFile = new File(filePath);
         if(importFile.exists()) {
             DataModel model = new DataModel(filePath);

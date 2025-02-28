@@ -3,9 +3,8 @@ package org.acme.projectjobschedule.data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.acme.projectjobschedule.domain.ResourceRequirement;
 
-import java.time.format.DateTimeFormatter;
+import java.sql.*;
 import java.util.List;
 
 public class ImportFileCreator {
@@ -96,6 +95,56 @@ public class ImportFileCreator {
                     "Сырок тв. глаз. \"ТОП АПЕЛЬСИН\" с кусочками цветной глазури с ароматом апельсина мдж 20 % ФЛОУПАК 35 г"
             )
             ) ;
+
+public ImportFileCreator() {
+
+   String url = "jdbc:sqlserver://10.164.30.246;databaseName=MES;,encrypt=true;trustServerCertificate=true";
+   // String url = "jdbc:sqlserver://10.164.30.246;databaseName=MES;integratedSecurity=true;encrypt=true;trustServerCertificate=true";
+
+    String sqlQuery = "SELECT v.KSK, v.SNPZ, v.DTI, v.DTM, v.KMC, v.EMK, v.KOLMV, v.MASSA, v.KOLEV, v.NP, v.UX, "
+            + "m.MASSA, m.EAN13, m.SNM, m.NAME "
+            + "FROM [MES].[dbo].[BD_VZPMC] as v, NS_MC as m "
+            + "WHERE (v.KMC = m.KMC) AND (v.DTI = ?) AND (v.KSK = ?) AND (m.MASSA < ?) "
+            + "ORDER BY v.SNPZ";
+
+    try {
+        // Установка соединения
+        try (Connection connection = DriverManager.getConnection(url);
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+
+            // Установка параметров для SQL-запроса
+            preparedStatement.setString(1, "2025-02-08T00:00:00"); // Параметр для v.DTI
+            preparedStatement.setString(2, "0119030000");          // Параметр для v.KSK
+            preparedStatement.setDouble(3, 0.1);                  // Параметр для m.MASSA
+
+            // Выполнение запроса
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+        // Обработка результата
+        while (resultSet.next()) {
+            String ksk = resultSet.getString("KSK");
+            String snpz = resultSet.getString("SNPZ");
+            String dti = resultSet.getString("DTI");
+            String dtm = resultSet.getString("DTM");
+            String kmc = resultSet.getString("KMC");
+            String emk = resultSet.getString("EMK");
+            int kolmv = resultSet.getInt("KOLMV");
+            double massaV = resultSet.getDouble("MASSA"); // MASSA из таблицы BD_VZPMC
+            int kolev = resultSet.getInt("KOLEV");
+            String np = resultSet.getString("NP");
+            String ux = resultSet.getString("UX");
+            double massaM = resultSet.getDouble("MASSA"); // MASSA из таблицы NS_MC
+            String ean13 = resultSet.getString("EAN13");
+            String snm = resultSet.getString("SNM");
+            String name = resultSet.getString("NAME");
+
+        }
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println(e.getMessage()); // Выводим стек ошибок для отладки
+    }
+    }
 
     @JsonPropertyOrder({"PID", "Priority", "VB", "Line3", "GTIN", "NP", "Line6", "ProductName"})
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
