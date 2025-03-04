@@ -63,6 +63,8 @@ public class ProjectJobScheduleApp {
                     allocations, scoreExplanation);
             exporter.convertToJsonFile("src/main/resources/exportData.json");
 
+            ImportFileCreator importFileCreator = new ImportFileCreator();
+            importFileCreator.convertToJsonFile("src/main/resources/importFiles/importFile.json");
 
         }
 
