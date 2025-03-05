@@ -3,7 +3,6 @@ package org.acme.projectjobschedule.data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -16,6 +15,7 @@ import java.util.*;
 public class ImportFileCreator {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
     private final Map<String, Object> jsonMap;
       private String startDate;
       private String endDate;
@@ -26,8 +26,10 @@ public class ImportFileCreator {
         List<JobRecord> jobList = createJobList();
         List<ProjectListCreator> projectList = createProjectList();
         this.jsonMap = new LinkedHashMap<>();
-        this.startDate= formatStartDate(startDate);
-        //this.startDate = getEndDate(startDate);
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, inputFormatter);
+        this.startDate = startDateTime.format(formatter);
+        LocalDateTime endDateTime = startDateTime.withHour(23).withMinute(59).withSecond(59);
+        this.endDate = endDateTime.format(formatter);
 
         jsonMap.put("ID", "P1570C30");
         jsonMap.put("StartDate", startDate);
@@ -60,9 +62,13 @@ public class ImportFileCreator {
     }
 
     private String getEndDate(String startDate){
-        LocalDateTime date = LocalDateTime.parse((String) startDate, formatter);
-        date.plusHours(23); date.plusMinutes(59); date.plusSeconds(59);
-        return String.valueOf(date);
+        System.out.println("startDate:" + startDate);
+        LocalDateTime date = LocalDateTime.parse(startDate, formatter);
+        System.out.println("LocalDateTime:" + date);
+        LocalDateTime endDate = date.withHour(23).withMinute(59).withSecond(59);
+        System.out.println("LocalDateTime plus time:" + endDate);
+
+        return String.valueOf(endDate);
     }
     private ExecutionModeList createExecutionModeList(String rid, int quantity, int efficiencyLine, String np){
         List<ResourceRequirementList> resourceRequirementList = new ArrayList<>();
@@ -90,13 +96,12 @@ public class ImportFileCreator {
                  PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
                 // Установка параметров для SQL-запроса
-                 preparedStatement.setString(1, "2025-02-08T00:00:00"); // Параметр для v.DTI
+                  preparedStatement.setString(1, "2025-02-08T00:00:00"); // Параметр для v.DTI
                   preparedStatement.setString(2, "0119030000");          // Параметр для v.KSK
                   preparedStatement.setDouble(3, 0.1);                  // Параметр для m.MASSA
 
                 // Выполнение запроса
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
                     // Обработка результата
                     while (resultSet.next()) {
                         String ksk = resultSet.getString("KSK");
@@ -113,11 +118,11 @@ public class ImportFileCreator {
                         String ean13 = resultSet.getString("EAN13");
                         String snm = resultSet.getString("SNM");
                         String name = resultSet.getString("NAME");
-                        this.startDate = dti;
-
+                        this.startDate = dtm;
                         List<ExecutionModeList> executionModeList = new ArrayList<>();
                         List<ResourceRequirementList> requirementList = new ArrayList<>();
                         for(ExecutionModeRecord executionModeRecord : executionModes){
+
                             if(executionModeRecord.ean13.equals(ean13)){
                                 executionModeList.add(new ExecutionModeList("SOURCE", 0, Collections.emptyList()));
                                 if(executionModeRecord.line1 != 0){
@@ -134,15 +139,12 @@ public class ImportFileCreator {
                                 }
                                 if(executionModeRecord.line5 != 0){
                                     executionModeList.add(createExecutionModeList("Line5", kolev,executionModeRecord.line5, np));
-
                                 }
                                 if(executionModeRecord.line6 != 0){
                                     executionModeList.add(createExecutionModeList("Line6", kolev,executionModeRecord.line6, np));
-
                                 }
                                 executionModeList.add(new ExecutionModeList("SINK", 0, Collections.emptyList()));
                             }
-
                         }
                         projectList.add(new ProjectListCreator(np, priority,vb,ean13,np, executionModeList));
                     }
@@ -367,7 +369,7 @@ public class ImportFileCreator {
     }
 
     private final List<ExecutionModeRecord> executionModes = List.of(
-            new ExecutionModeRecord("481026804372"	,200,196, 206, 220,220,220,
+            new ExecutionModeRecord("4810268043727"	,200,196, 206, 220,220,220,
                     "Сырок тв.г.Кок-мин мдж20%40г"
             ),
             new ExecutionModeRecord("4810268043710",200,196,206,220, 220,220,
