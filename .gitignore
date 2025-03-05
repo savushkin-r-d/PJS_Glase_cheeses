@@ -25,5 +25,7 @@ venv*
 #Directories
 .idea/
 target/
+lib/
+src/main/resources/exportFiles/
 src/main/resources/exportData.json
 src/test/resources/exportData.json
