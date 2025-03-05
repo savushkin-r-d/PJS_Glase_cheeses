@@ -30,7 +30,9 @@ public class ProjectJobScheduleApp {
     public static void main(String[] args) throws FileNotFoundException {
 
         // Load the problem from JSON
-        String filePath = "src/main/resources/exampleData.json"; // Путь к файлу JSON
+        ImportFileCreator importFileCreator = new ImportFileCreator();
+        importFileCreator.convertToJsonFile("src/main/resources/importFiles/importFile.json");
+        String filePath = "src/main/resources/importFiles/importFile.json"; // Путь к файлу JSON
         ImportFileCreator fileCreator = new ImportFileCreator();
         File importFile = new File(filePath);
         if(importFile.exists()) {
@@ -62,10 +64,6 @@ public class ProjectJobScheduleApp {
                     problem.getProjects(), problem.getResources(), problem.getResourceRequirements(),
                     allocations, scoreExplanation);
             exporter.convertToJsonFile("src/main/resources/exportData.json");
-
-            ImportFileCreator importFileCreator = new ImportFileCreator();
-            importFileCreator.convertToJsonFile("src/main/resources/importFiles/importFile.json");
-
         }
 
         else {
