@@ -1,8 +1,8 @@
 {
   "ID" : "P1570C30",
   "HardConstraintsPenalty" : 0,
-  "MediumConstraintsPenalty1" : -12,
-  "SoftConstraintsPenalty" : -8,
+  "MediumConstraintsPenalty1" : 0,
+  "SoftConstraintsPenalty" : 0,
   "Projects" : [ "261", "262", "263" ],
   "Resources" : [ "Line1", "Line2" ],
   "AllocationList" : [ {
@@ -18,8 +18,8 @@
     "ID" : "Allocation5",
     "PID" : "262",
     "JID" : "262,Line2",
-    "StartDate" : "2025-02-02 00:04:00",
-    "EndDate" : "2025-02-02 01:14:00",
+    "StartDate" : "2025-02-02 00:00:00",
+    "EndDate" : "2025-02-02 01:10:00",
     "Duration" : 70,
     "PredAllocationList" : [ "Allocation4" ],
     "ResourceRequirementList" : [ "Line2" ]
@@ -47,7 +47,7 @@
     "Allocation" : "Allocation-5",
     "MatchCount" : "1",
     "Constraint" : "Total project delay",
-    "Penalty" : "0hard/-74medium/0soft"
+    "Penalty" : "0hard/-70medium/0soft"
   }, {
     "Allocation" : "Allocation-8",
     "MatchCount" : "1",
@@ -57,7 +57,7 @@
   "TotalMatch" : {
     "initScore" : 0,
     "hardScore" : 0,
-    "mediumScore" : -254,
+    "mediumScore" : -250,
     "softScore" : -120,
     "feasible" : true,
     "zero" : false,

@@ -27,6 +27,8 @@ import java.util.List;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class DataModelTest {
     @Test
     public void testImportAndExport() throws Exception {
@@ -65,6 +67,9 @@ public class DataModelTest {
         String actualOutputFile = Files.readString(Paths.get("src/test/resources/exportData.json"));
         String expectedOutputFile = Files.readString(Paths.get("src/test/resources/expectedOutput.json"));
         // Сравнение содержимого JSON
+
+
         JSONAssert.assertEquals(actualOutputFile, expectedOutputFile, JSONCompareMode.STRICT);
     }
+
 }

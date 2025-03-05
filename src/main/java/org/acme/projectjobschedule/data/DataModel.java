@@ -335,9 +335,6 @@ public class DataModel extends JsonImporter {
             if (isSource || isSink) {
                 allocation.setExecutionMode(allocation.getJob().getExecutionModes().get(0));
                 allocation.setDelay(0);
-                if (isSink) {
-                    doneDate += 4;
-                }
             }
         }
 

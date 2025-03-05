@@ -1,6 +1,7 @@
 package org.acme.projectjobschedule.app;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import java.time.Duration;
@@ -26,11 +27,13 @@ public class ProjectJobScheduleApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectJobScheduleApp.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         // Load the problem from JSON
-        String filePath = "src/main/resources/importData.json"; // Путь к файлу JSON
-
+        ImportFileCreator importFileCreator = new ImportFileCreator();
+        importFileCreator.convertToJsonFile("src/main/resources/importFiles/importFile.json");
+        String filePath = "src/main/resources/importFiles/importFile.json"; // Путь к файлу JSON
+        ImportFileCreator fileCreator = new ImportFileCreator();
         File importFile = new File(filePath);
         if(importFile.exists()) {
             DataModel model = new DataModel(filePath);
